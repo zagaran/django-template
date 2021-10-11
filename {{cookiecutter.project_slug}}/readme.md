@@ -1,3 +1,9 @@
+#
+
+This project was created using https://github.com/zagaran/django-template
+
+See the readme on django-template for an explanation of included features.
+
 # Local Project Setup
 
 ```

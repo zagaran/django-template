@@ -1,18 +1,14 @@
 # How To Use This Template
 
-1. Reset the git history to start your project.
+This template is a [cookiecutter](https://github.com/cookiecutter/cookiecutter) template.  Create a project from it using the following:
 ```
-# reset the git history
-rm -rf .git
-git init
-git branch -M main
-git add .
-git commit -m "init"
-git remote add origin [REMOTE_URL]
-git push -u origin main
+pip install "cookiecutter>=1.7.0"
+cookiecutter https://github.com/zagaran/django-template
 ```
-2. Decide which optional features you'd like to use.
 
+The cookiecutter command will give you an interactive prompt to choose which optional features to inlcude (see below)
+
+If you have an existing project, you can see a project based on this template here: https://github.com/zagaran/sample-django-app
 
 # Included Optional Features
 

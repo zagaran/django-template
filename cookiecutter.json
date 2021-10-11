@@ -1,21 +1,23 @@
-MIT License
+{
+  "project_name": "[PROJECT]",
+  "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_')|replace('.', '_')|trim() }}",
 
-Copyright (c) 2021 Zagaran, Inc.
+  "feature_annotations":    ["off", "on"],
+  "reference_examples":     ["on", "off"],
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+  "bootstrap_messages":     ["enabled", "disabled"],
+  "crispy_forms":           ["enabled", "disabled"],
+  "debug_toolbar":          ["enabled", "disabled"],
+  "django_react":           ["enabled", "disabled"],
+  "django_ses":             ["enabled", "disabled"],
+  "django_social":          ["enabled", "disabled"],
+  "django_storages":        ["enabled", "disabled"],
+  "docker":                 ["enabled", "disabled"],
+  "elastic_beanstalk":      ["enabled", "disabled"],
+  "sentry":                 ["enabled", "disabled"],
+  "pre_commit":             ["enabled", "disabled"],
+  "sass_bootstrap":         ["enabled", "disabled"],
+  "security_settings":      ["enabled", "disabled"],
+  "sentry":                 ["enabled", "disabled"],
+  "user_action_tracking":   ["enabled", "disabled"]
+}
