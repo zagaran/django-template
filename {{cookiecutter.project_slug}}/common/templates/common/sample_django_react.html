@@ -1,0 +1,28 @@
+{%- if cookiecutter.reference_examples == "on" -%}
+{%- if cookiecutter.django_react == "enabled" -%}
+{%- if cookiecutter.feature_annotations == "on" -%}
+{% raw %}{# START_FEATURE django_react #}{% endraw %}
+{%- endif %}
+{%- raw %}
+
+{# TODO: delete me; this is just a reference example #}
+
+{% extends 'base_templates/base.html' %}
+{% load django_react_components %}
+{% load render_bundle from webpack_loader %}
+
+{% block body %}
+  {% render_bundle 'runtime' %}
+  {% render_bundle 'Home' %}
+  {% render_bundle 'Hello' %}
+  {% react_component 'Home' id='home' message=message %}
+  {% react_component 'Hello' id='hello' props=sample_props %}
+{% endblock %}
+
+{%- endraw %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+{% raw %}{# END_FEATURE django_react #}{% endraw %}
+{%- endif %}
+{%- endif %}
+{%- endif %}

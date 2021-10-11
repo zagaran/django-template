@@ -1,0 +1,145 @@
+Django==3.2.*  # Latest LTS version
+django-environ
+django-extensions
+requests
+psycopg2
+
+####### OPTIONAL FEATURES #######
+{%- if cookiecutter.elastic_beanstalk == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE elastic_beanstalk
+{%- endif %}
+awscli
+awsebcli
+eb-create-environment
+eb-ssm
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE elastic_beanstalk
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.django_social == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE django_social
+{%- endif %}
+social-auth-app-django
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE django_social
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.crispy_forms == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE crispy_forms
+{%- endif %}
+django-crispy-forms
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE crispy_forms
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.django_react == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE django_react
+{%- endif %}
+django-react-components
+django-webpack-loader
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE django_react
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.debug_toolbar == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE debug_toolbar
+{%- endif %}
+django-debug-toolbar
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE debug_toolbar
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.sentry == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE sentry
+{%- endif %}
+sentry-sdk
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE sentry
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.django_storages == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE django_storages
+{%- endif %}
+django-storages
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE django_storages
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.docker == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE docker
+{%- endif %}
+gunicorn
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE docker
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.sentry == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE sentry
+{%- endif %}
+sentry-sdk
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE sentry
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.django_ses == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE django_ses
+{%- endif %}
+django-ses
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE django_ses
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.pre_commit == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE pre_commit
+{%- endif %}
+pre-commit
+flake8
+isort
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE pre_commit
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.sass_bootstrap == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE sass_bootstrap
+{%- endif %}
+django-compressor
+django-sass-processor
+libsass
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE sass_bootstrap
+{%- endif %}
+{%- endif %}
+
+################################
+
+# Convenience
+ipython
+werkzeug
+pip-tools
+coverage
+
+# Security
+cryptography==3.3.2  # Lock to 3.3.2 if running into "No module named 'setuptools_rust'" error

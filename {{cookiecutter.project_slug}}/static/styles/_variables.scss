@@ -1,0 +1,13 @@
+/**
+ * Sass variables
+ */
+
+/* Override Bootstrap default variables */
+{%- if cookiecutter.reference_examples == "on" %}
+
+// TODO: delete me; this is just a reference example
+$primary: #2123a7;
+{%- endif %}
+
+@import 'bootstrap/scss/_functions.scss';
+@import 'bootstrap/scss/_variables.scss';

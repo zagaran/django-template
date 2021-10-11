@@ -1,0 +1,21 @@
+{%- if cookiecutter.reference_examples == "on" -%}
+{%- if cookiecutter.crispy_forms == "enabled" -%}
+{%- if cookiecutter.feature_annotations == "on" -%}
+{% raw %}{# START_FEATURE crispy_forms #}{% endraw %}
+{%- endif %}
+{%- raw %}
+{# TODO: delete me; this is just a reference example #}
+{% extends "base_templates/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Sample Form{% endblock %}
+
+{% block body %}
+{% crispy form %}
+{% endblock %}
+{%- endraw %}
+{%- if cookiecutter.feature_annotations == "on" %}
+{% raw %}{# END_FEATURE crispy_forms #}{% endraw %}
+{%- endif %}
+{%- endif %}
+{%- endif %}

@@ -1,0 +1,45 @@
+{%- raw -%}
+{% extends "base_templates/base.html" %}
+
+{% endraw %}
+{%- if cookiecutter.sass_bootstrap == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+{% raw %}{# START_FEATURE sass_bootstrap #}{% endraw %}
+{%- endif %}
+{%- raw %}
+{% load sass_tags %}
+{%- endraw %}
+{%- if cookiecutter.feature_annotations == "on" %}
+{% raw %}{# END_FEATURE sass_bootstrap #}{% endraw %}
+{%- endif %}
+{%- endif %}
+{%- raw %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+  <link href="{% sass_src 'styles/pages/index.scss' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <p>Welcome to {% endraw %}{{ cookiecutter.project_name }}{% raw %}. Please log in to continue.</p>
+    {% endraw %}
+    {%- if cookiecutter.sass_bootstrap == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    {% raw %}{# START_FEATURE sass_bootstrap #}{% endraw %}
+    {%- endif %}
+    {%- if cookiecutter.reference_examples == "on" %}
+    {%- raw %}
+    {# TODO: delete me; this is just a reference example #}
+    <button class="btn btn-primary does-nothing-button">This button does nothing</button>
+    {%- endraw %}
+    {%- endif %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    {% raw %}{# END_FEATURE sass_bootstrap #}{% endraw %}
+    {%- endif %}
+    {%- endif %}
+    {%- raw %}
+  </div>
+{% endblock %}
+{%- endraw %}

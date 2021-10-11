@@ -1,0 +1,89 @@
+{%- if cookiecutter.sass_bootstrap == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" -%}
+{% raw %}{# START_FEATURE sass_bootstrap #}{% endraw %}
+{%- endif %}
+{%- raw %}
+{% load sass_tags %}
+{%- endraw %}
+{%- if cookiecutter.feature_annotations == "on" %}
+{% raw %}{# END_FEATURE sass_bootstrap #}{% endraw %}
+{%- endif %}
+{%- endif %}
+{%- raw %}
+
+<html>
+  <head>
+    <title>{% endraw %}{{ cookiecutter.project_name }}{% raw %} - {% block title %}{% endblock %}</title>
+    {%- endraw %}
+    {%- if cookiecutter.sass_bootstrap == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    {% raw %}{# START_FEATURE sass_bootstrap #}{% endraw %}
+    {%- endif %}
+    {%- raw %}
+    <link href="{% sass_src 'styles/base.scss' %}" rel="stylesheet">
+    {%- endraw %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    {% raw %}{# END_FEATURE sass_bootstrap #}{% endraw %}
+    {%- endif %}
+    {%- endif %}
+    {%- raw %}
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          {% endraw %}{{ cookiecutter.project_name }}{% raw %}
+        </a>
+      </div>
+      {% if user.is_authenticated %}
+        <p class="nav-item">Logged in as {{ user }}</p>
+        <form method="post" action="{% url "logout" %}" class="nav-item">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-default">Log Out</button>
+        </form>
+      {% else %}
+        <div class="nav-item">
+          {% endraw %}
+          {%- if cookiecutter.django_social == "enabled" %}
+          {%- if cookiecutter.feature_annotations == "on" -%}
+          {% raw %}{# START_FEATURE django_social #}{% endraw %}
+          {%- endif %}
+          {%- raw %}
+          <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-primary navbar-btn">Log in with Google</a>
+          {% endraw %}
+          {%- if cookiecutter.feature_annotations == "on" -%}
+          {% raw %}{# END_FEATURE django_social #}{% endraw %}
+          {%- endif %}
+          {%- endif %}
+          {%- raw %}
+        </div>
+      {% endif %}
+      </div>
+    </nav>
+    {% endraw %}
+    {%- if cookiecutter.bootstrap_messages == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" -%}
+    {% raw %}{# START_FEATURE bootstrap_messages #}{% endraw %}
+    {%- endif %}
+    {%- raw %}
+    <div class="container">
+      {% for message in messages %}
+        <div class="alert {% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        {{ message }}
+        </div>
+      {% endfor %}
+      {% block body %}{% endblock %}
+    </div>
+    {% endraw %}
+    {%- if cookiecutter.feature_annotations == "on" -%}
+    {% raw %}{# END_FEATURE bootstrap_messages #}{% endraw %}
+    {%- endif %}
+    {%- endif %}
+    {%- raw %}
+  </body>
+</html>
+{%- endraw %}
