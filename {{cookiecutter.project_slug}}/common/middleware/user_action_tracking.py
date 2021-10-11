@@ -1,5 +1,5 @@
-{%- if cookiecutter.user_action_tracking == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
+{%- if cookiecutter.user_action_tracking == "enabled" -%}
+{%- if cookiecutter.feature_annotations == "on" -%}
 # START_FEATURE user_action_tracking
 {%- endif %}
 from django.conf import settings

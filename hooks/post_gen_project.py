@@ -18,7 +18,10 @@ def delete_empty_files():
         if path.split(file_path)[-1] in exempt_files:
             continue
         with open(file_path, 'r') as file:
-            contents = file.read()
+            try:
+                contents = file.read()
+            except UnicodeDecodeError:
+                pass
         if not contents.strip():
             os.remove(file_path)
 
@@ -29,14 +32,14 @@ def print_next_steps():
     print("Then set up a virtual environment (https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment)")
     print("Then run the following commands:\n")
     commands = [
-        "pip install pip-tools"
+        "pip install pip-tools",
         "pip-compile --upgrade",
         "pip install -r requirements.txt",
         "cp config/.env.example config/.env",
         "python manage.py makemigrations",
     ]
     if "{{ cookiecutter.django_react }}".lower() == "enabled":
-        commands.append("npm install -g npm-check-updates")
+        commands.append("npm install")
     for command in commands:
         print(command)
 
