@@ -8,6 +8,22 @@ cookiecutter https://github.com/zagaran/django-template
 
 The cookiecutter command will give you an interactive prompt to choose which optional features to inlcude (see below)
 
+Once you have cloned the project, [create a virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment)
+
+Then run the following:
+
+```
+pip install pip-tools
+pip-compile --upgrade
+pip install -r requirements.txt
+cp config/.env.example config/.env
+python manage.py makemigrations
+
+# If using the `django_react` feature
+npm install -g npm-check-updates
+
+```
+
 If you have an existing project, you can see a project based on this template here: https://github.com/zagaran/sample-django-app
 
 # Included Optional Features

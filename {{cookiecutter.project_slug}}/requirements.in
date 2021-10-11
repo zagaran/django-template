@@ -3,8 +3,10 @@ django-environ
 django-extensions
 requests
 psycopg2
+{%- if cookiecutter.feature_annotations == "on" %}
 
 ####### OPTIONAL FEATURES #######
+{%- endif %}
 {%- if cookiecutter.elastic_beanstalk == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE elastic_beanstalk
@@ -132,8 +134,10 @@ libsass
 # END_FEATURE sass_bootstrap
 {%- endif %}
 {%- endif %}
+{%- if cookiecutter.feature_annotations == "on" %}
 
 ################################
+{%- endif %}
 
 # Convenience
 ipython
