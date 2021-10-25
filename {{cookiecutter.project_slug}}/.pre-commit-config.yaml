@@ -1,4 +1,7 @@
+{%- if cookiecutter.pre_commit == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE pre_commit
+{%- endif %}
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 default_language_version:
@@ -24,4 +27,7 @@ repos:
     hooks:
     -   id: isort
         types: [file, python]
+{%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE pre_commit
+{%- endif %}
+{%- endif %}
