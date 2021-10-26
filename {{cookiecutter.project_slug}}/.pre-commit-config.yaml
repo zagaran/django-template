@@ -31,3 +31,4 @@ repos:
 # END_FEATURE pre_commit
 {%- endif %}
 {%- endif %}
+s
