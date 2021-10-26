@@ -6,13 +6,14 @@ from common import views
 
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
+    path("health_check/", views.HealthCheckView.as_view(), name="index"),
     {%- if cookiecutter.reference_examples == "on" %}
     {%- if cookiecutter.django_react == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE django_react
     {%- endif %}
     # TODO: delete me; this is just a reference example
-    path("django_react", views.DjangoReactView.as_view(), name='django-react-demo'),
+    path("django_react/", views.DjangoReactView.as_view(), name='django-react-demo'),
     {%- if cookiecutter.feature_annotations == "on" %}
     # END_FEATURE django_react
     {%- endif %}

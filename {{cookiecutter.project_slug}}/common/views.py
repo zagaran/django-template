@@ -1,6 +1,7 @@
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.views.generic.base import TemplateView, View
+from django.http.response import HttpResponse
 {%- if cookiecutter.crispy_forms == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE crispy_forms
@@ -16,6 +17,11 @@ from crispy_forms.tests.forms import SampleForm
 
 class IndexView(TemplateView):
     template_name = "common/index.html"
+
+
+class HealthCheckView(View):
+    def get(self, request):
+        return HttpResponse("ok")
 
 
 class LogoutView(View):
