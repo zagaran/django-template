@@ -18,7 +18,7 @@ class IndexView(TemplateView):
     template_name = "common/index.html"
 
 
-def HealthCheckView(View):
+class HealthCheckView(View):
     def get(self, request):
         return HttpResponse("ok")
 
