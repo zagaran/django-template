@@ -19,7 +19,7 @@ class IndexView(TemplateView):
 
 
 def HealthCheckView(View):
-    def get():
+    def get(self, request):
         return HttpResponse("ok")
 
 
