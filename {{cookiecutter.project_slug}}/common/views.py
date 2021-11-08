@@ -1,5 +1,5 @@
 from django.contrib.auth import logout
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView, View
 from django.http.response import HttpResponse
 {%- if cookiecutter.crispy_forms == "enabled" %}
