@@ -1,5 +1,5 @@
 from django.contrib.auth import logout
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView, View
 from django.http.response import HttpResponse
 {%- if cookiecutter.crispy_forms == "enabled" %}
@@ -62,3 +62,9 @@ class SampleFormView(FormView):
 {%- endif %}
 {%- endif %}
 {%- endif %}
+
+def error_404(request, exception):
+    return render(request, "errors/404.html", status=404)
+
+def error_500(request):
+    return render(request, "errors/500.html", status=500)
