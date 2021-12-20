@@ -15,7 +15,7 @@ npm install
 # END_FEATURE django_react
 {%- endif -%}
 {%- endif %}
-{%- if cookiecutter.saas_bootstrap == "enabled" -%}
+{%- if cookiecutter.sass_bootstrap == "enabled" -%}
 {%- if cookiecutter.feature_annotations == "on" -%}
 # START_FEATURE sass_bootstrap
 {%- endif %}
