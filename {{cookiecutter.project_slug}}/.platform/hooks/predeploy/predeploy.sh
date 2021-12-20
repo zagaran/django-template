@@ -4,6 +4,7 @@
 {%- endif %}
 #!/bin/bash
 source $PYTHONPATH/activate
+
 {% if cookiecutter.django_react == "enabled" -%}
 {%- if cookiecutter.feature_annotations == "on" -%}
 # START_FEATURE django_react
