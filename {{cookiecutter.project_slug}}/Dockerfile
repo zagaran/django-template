@@ -24,6 +24,7 @@ RUN set -ex \
 
 ENV VIRTUAL_ENV /env
 ENV PATH /env/bin:$PATH
+
 {% if cookiecutter.django_react == "enabled" -%}
 {%- if cookiecutter.feature_annotations == "on" -%}
 # START_FEATURE django_react
@@ -36,10 +37,12 @@ RUN npm install -G nwb
 RUN npm install
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE django_react
+
+{% endif -%}
 {%- endif -%}
-{%- endif %}
 COPY . /app/
 COPY ./config/.env.example /app/config/.env
+
 {% if cookiecutter.django_react == "enabled" -%}
 {%- if cookiecutter.feature_annotations == "on" -%}
 # START_FEATURE django_react
@@ -47,7 +50,8 @@ COPY ./config/.env.example /app/config/.env
 RUN ./node_modules/.bin/nwb build --no-vendor
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE django_react
-{%- endif -%}
+
+{% endif -%}
 {%- endif -%}
 {%- if cookiecutter.sass_bootstrap == "enabled" -%}
 {%- if cookiecutter.feature_annotations == "on" -%}
@@ -56,8 +60,9 @@ RUN ./node_modules/.bin/nwb build --no-vendor
 RUN python manage.py compilescss
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE sass_bootstrap
+
+{% endif -%}
 {%- endif -%}
-{%- endif %}
 RUN python manage.py collectstatic --noinput
 
 RUN rm /app/config/.env
