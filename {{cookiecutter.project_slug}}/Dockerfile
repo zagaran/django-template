@@ -33,7 +33,6 @@ COPY ./nwb.config.js /app/nwb.config.js
 COPY ./package.json /app/package.json
 COPY ./package-lock.json /app/package-lock.json
 
-RUN npm install -G nwb
 RUN npm install
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE django_react
