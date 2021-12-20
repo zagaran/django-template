@@ -38,6 +38,8 @@ def print_next_steps():
         "cp config/.env.example config/.env",
         "python manage.py makemigrations",
     ]
+    if "{{ cookiecutter.elastic_beanstalk }}".lower() == "enabled":
+        commands.append("git add --chmod=+x -- .platform/*/*/*.sh")
     if "{{ cookiecutter.django_react }}".lower() == "enabled":
         commands.append("npm install")
     for command in commands:
