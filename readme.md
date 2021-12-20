@@ -143,6 +143,12 @@ As a default for web applications, we strongly recommend using Elastic Beanstalk
 
 To create a new deployment, [set up your local AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) e.g. ~/.aws/config,
 
+Ensure shell files in the `.platoform` directory are executable according to git.
+You can check if they are executable via `git ls-files -s .platform`;
+you should see `100755` before any shell files in the output of this command.
+If you see `100644` before any of your shell files,
+run `git add --chmod=+x -- .platform/*/*/*.sh` to make them executable.
+
 Set desired parameters `.elasticbeanstalk/eb-create-environment.yml`
 
 Use [eb-create-environment](https://github.com/zagaran/eb-create-environment/):
