@@ -35,6 +35,7 @@ social-auth-app-django
 # START_FEATURE crispy_forms
 {%- endif %}
 django-crispy-forms
+crispy-bootstrap5
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE crispy_forms
 {%- endif %}

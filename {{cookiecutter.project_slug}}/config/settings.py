@@ -116,6 +116,7 @@ THIRD_PARTY_APPS = [
     # START_FEATURE crispy_forms
     {%- endif %}
     "crispy_forms",
+    "crispy-bootstrap5"
     {%- if cookiecutter.feature_annotations == "on" %}
     # END_FEATURE crispy_forms
     {%- endif %}
@@ -338,7 +339,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env("GOOGLE_OAUTH2_SECRET")
 {% if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE crispy_forms
 {%- endif %}
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE crispy_forms
 {%- endif %}
