@@ -116,7 +116,7 @@ THIRD_PARTY_APPS = [
     # START_FEATURE crispy_forms
     {%- endif %}
     "crispy_forms",
-    "crispy-bootstrap5"
+    "crispy_bootstrap5",
     {%- if cookiecutter.feature_annotations == "on" %}
     # END_FEATURE crispy_forms
     {%- endif %}
