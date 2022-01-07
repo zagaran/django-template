@@ -10,6 +10,9 @@ source $PYTHONPATH/activate
 # START_FEATURE django_react
 {%- endif %}
 npm install
+# delete old webpack static resources
+rm -rf static/webpack_bundles/ || echo "no webpack bundles to remove"
+rm -rf staticfiles/webpack_bundles/ || echo "no staticfiles webpack bundles to remove"
 ./node_modules/.bin/nwb build --no-vendor
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE django_react
