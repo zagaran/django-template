@@ -15,6 +15,7 @@ awscli
 awsebcli
 eb-create-environment
 eb-ssm
+ec2_metadata
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE elastic_beanstalk
 {%- endif %}
