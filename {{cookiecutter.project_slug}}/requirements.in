@@ -10,11 +10,18 @@ psycopg2
 {%- if cookiecutter.elastic_beanstalk == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE elastic_beanstalk
+# The following packages are useful tools for interacting with AWS and Elastic Beanstalk. Please install these
+# as necessary.
+#
+# For interacting with general AWS services (note, this package often has conflicts with its botocore dependency)
+# awscli
+# For interacting with Elastic Beanstalk (note, this package often has conflicts with its botocore dependency)
+# awsebcli
+# For automating the creation of Elastic Beanstalk applications
+# eb-create-environment
+# For Elastic Beanstalk SSH functionality without requiring shared private keys
+# eb-ssm
 {%- endif %}
-awscli
-awsebcli
-eb-create-environment
-eb-ssm
 ec2_metadata
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE elastic_beanstalk
