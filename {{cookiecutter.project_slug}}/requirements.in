@@ -10,6 +10,8 @@ psycopg2
 {%- if cookiecutter.elastic_beanstalk == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE elastic_beanstalk
+{%- endif %}
+{%- if cookiecutter.reference_examples == "on" %}
 # The following packages are useful tools for interacting with AWS and Elastic Beanstalk. Please install these
 # as necessary.
 #
