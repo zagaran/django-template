@@ -1,13 +1,13 @@
 {%- if cookiecutter.sass_bootstrap == "enabled" %}
-  {%- if cookiecutter.feature_annotations == "on" -%}
-  {% raw %}{# START_FEATURE sass_bootstrap #}{% endraw %}
-  {%- endif %}
-  {%- raw %}
-    {% load sass_tags %}
-  {%- endraw %}
-  {%- if cookiecutter.feature_annotations == "on" %}
-    {% raw %}{# END_FEATURE sass_bootstrap #}{% endraw %}
-  {%- endif %}
+{%- if cookiecutter.feature_annotations == "on" -%}
+{% raw %}{# START_FEATURE sass_bootstrap #}{% endraw %}
+{%- endif %}
+{%- raw %}
+{% load sass_tags %}
+{%- endraw %}
+{%- if cookiecutter.feature_annotations == "on" %}
+{% raw %}{# END_FEATURE sass_bootstrap #}{% endraw %}
+{%- endif %}
 {%- endif %}
 
 {%- raw %}
@@ -37,7 +37,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
-      <div class="container fluid">
+      <div class="container-fluid">
         <a class="navbar-brand" href="/">
           {% endraw %}{{ cookiecutter.project_name }}{% raw %}
         </a>
@@ -52,14 +52,14 @@
                   <span class="bi-person"></span> {{ user }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="user-menu-dropdown">
-                  <form method="post" action="{% url "logout" %}" class="nav-item d-grid">
+                  <form method="post" action="{% url 'logout' %}" class="nav-item d-grid">
                     {% csrf_token %}
                     <button type="submit" class="dropdown-item">Log Out</button>
                   </form>
                 </div>
               </li>
-           {% else %}
-             <li class="nav-item d-grid">
+            {% else %}
+              <li class="nav-item d-grid">
                 {% endraw %}
                 {%- if cookiecutter.django_social == "enabled" %}
                 {%- if cookiecutter.feature_annotations == "on" -%}
@@ -73,8 +73,8 @@
                 {%- endif %}
                 {%- endif %}
                 {%- raw %}
-             </li>
-           {% endif %}
+              </li>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -91,7 +91,7 @@
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-        {{ message }}
+          {{ message }}
         </div>
       {% endfor %}
       {% block body %}{% endblock %}
