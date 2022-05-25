@@ -1,11 +1,26 @@
 import glob
 import os
+import shutil
 from os import path
 
 
+CONDITIONAL_REMOVE_PATHS = [
+    "{% if cookiecutter.elastic_beanstalk == 'disabled' %}.ebextensions{% endif %}",
+    "{% if cookiecutter.elastic_beanstalk == 'disabled' %}.elasticbeanstalk{% endif %}",
+    "{% if cookiecutter.elastic_beanstalk == 'disabled' %}.platform{% endif %}",
+]
+
+
 def main():
+    delete_conditional_paths()
     delete_empty_files()
     print_next_steps()
+
+
+def delete_conditional_paths():
+    for path in CONDITIONAL_REMOVE_PATHS:
+        if path and os.path.exists(path):
+            shutil.rmtree(path)
 
 
 def delete_empty_files():

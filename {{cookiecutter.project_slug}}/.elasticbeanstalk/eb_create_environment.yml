@@ -1,4 +1,3 @@
-{%- if cookiecutter.elastic_beanstalk == "enabled" -%}
 {%- if cookiecutter.feature_annotations == "on" -%}
 # START_FEATURE elastic_beanstalk
 {%- endif %}
@@ -48,5 +47,4 @@ RDS:
     LicenseModel: "postgresql-license"
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE elastic_beanstalk
-{%- endif %}
 {%- endif %}
