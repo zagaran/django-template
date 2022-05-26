@@ -9,6 +9,7 @@ CONDITIONAL_REMOVE_PATHS = [
     "{% if cookiecutter.elastic_beanstalk == 'disabled' %}.elasticbeanstalk{% endif %}",
     "{% if cookiecutter.elastic_beanstalk == 'disabled' %}.platform{% endif %}",
     "{% if cookiecutter.docker == 'disabled' %}Dockerfile{% endif %}",
+    "{% if cookiecutter.docker == 'disabled' %}.dockerignore{% endif %}",
     "{% if cookiecutter.pre_commit == 'disabled' %}.pre-commit-config.yaml{% endif %}",
     "{% if cookiecutter.django_react == 'disabled' %}config/webpack_loader.py{% endif %}",
     "{% if cookiecutter.django_react == 'disabled' %}nwb.config.js{% endif %}",
