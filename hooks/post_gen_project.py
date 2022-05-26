@@ -8,6 +8,10 @@ CONDITIONAL_REMOVE_PATHS = [
     "{% if cookiecutter.elastic_beanstalk == 'disabled' %}.ebextensions{% endif %}",
     "{% if cookiecutter.elastic_beanstalk == 'disabled' %}.elasticbeanstalk{% endif %}",
     "{% if cookiecutter.elastic_beanstalk == 'disabled' %}.platform{% endif %}",
+    "{% if cookiecutter.docker == 'disabled' %}Dockerfile{% endif %}",
+    "{% if cookiecutter.pre_commit == 'disabled' %}.pre-commit-config.yaml{% endif %}",
+    "{% if cookiecutter.django_react == 'disabled' %}config/webpack_loader.py{% endif %}",
+    "{% if cookiecutter.django_react == 'disabled' %}nwb.config.js{% endif %}",
 ]
 
 
@@ -20,7 +24,10 @@ def main():
 def delete_conditional_paths():
     for path in CONDITIONAL_REMOVE_PATHS:
         if path and os.path.exists(path):
-            shutil.rmtree(path)
+            if os.path.isdir(path):
+                shutil.rmtree(path)
+            else:
+                os.remove(path)
 
 
 def delete_empty_files():

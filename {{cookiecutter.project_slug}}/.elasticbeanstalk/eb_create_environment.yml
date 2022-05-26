@@ -1,6 +1,4 @@
-{%- if cookiecutter.feature_annotations == "on" -%}
-# START_FEATURE elastic_beanstalk
-{%- endif %}
+{% if cookiecutter.feature_annotations == "on" -%}# START_FEATURE elastic_beanstalk{%- endif %}
 # https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html
 ElasticBeanstalk:
   # aws elasticbeanstalk list-available-solution-stacks --region us-east-1
@@ -45,6 +43,4 @@ RDS:
     Port: 5432
     DBParameterGroupName: "default.postgres12"
     LicenseModel: "postgresql-license"
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE elastic_beanstalk
-{%- endif %}
+{% if cookiecutter.feature_annotations == "on" -%}# END_FEATURE elastic_beanstalk{%- endif %}
