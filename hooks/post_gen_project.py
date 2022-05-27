@@ -13,6 +13,7 @@ CONDITIONAL_REMOVE_PATHS = [
     "{% if cookiecutter.pre_commit == 'disabled' %}.pre-commit-config.yaml{% endif %}",
     "{% if cookiecutter.django_react == 'disabled' %}config/webpack_loader.py{% endif %}",
     "{% if cookiecutter.django_react == 'disabled' %}nwb.config.js{% endif %}",
+    "{% if cookiecutter.django_react == 'disabled' and cookiecutter.sass_bootstrap == 'disabled' %}package.json{% endif %}",
 ]
 
 

@@ -1,15 +1,20 @@
 {
-  "name": "django-react-template",
+  "name": "sample-django-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^5.1.1",
+    {% if cookiecutter.sass_bootstrap == "enabled" -%}
+    "bootstrap": "^5.1.1"{% if cookiecutter.django_react == "enabled" %},{% endif %}
+    {%- endif %}
+    {% if cookiecutter.django_react == "enabled" -%}
     "django-react-loader": "^0.1.7",
     "nwb": "^0.24.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "webpack-bundle-tracker": "^0.4.3"
+    {%- endif %}
   },
+  {% if cookiecutter.django_react == "enabled" -%}
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -22,6 +27,7 @@
       "react-app/jest"
     ]
   },
+  {%- endif -%}
   "browserslist": {
     "production": [
       ">0.2%",

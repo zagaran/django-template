@@ -14,7 +14,6 @@
   "django_storages":        ["enabled", "disabled"],
   "docker":                 ["enabled", "disabled"],
   "elastic_beanstalk":      ["enabled", "disabled"],
-  "sentry":                 ["enabled", "disabled"],
   "pre_commit":             ["enabled", "disabled"],
   "sass_bootstrap":         ["enabled", "disabled"],
   "security_settings":      ["enabled", "disabled"],
