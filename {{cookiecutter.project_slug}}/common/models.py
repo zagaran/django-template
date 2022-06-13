@@ -43,8 +43,6 @@ class User(AbstractUser, TimestampedModel):
     {%- endif %}
     {%- endif %}
 
-    def __str__(self):
-        return self.email
 {%- if cookiecutter.reference_examples == "on" %}
 {%- if cookiecutter.django_storages == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}

@@ -1,7 +1,4 @@
-{%- if cookiecutter.docker == "enabled" -%}
-{%- if cookiecutter.feature_annotations == "on" -%}
-# START_FEATURE docker
-{%- endif %}
+{% if cookiecutter.feature_annotations == "on" -%}# START_FEATURE docker{%- endif %}
 FROM python:3.8.8-slim-buster
 
 WORKDIR /app
@@ -26,42 +23,34 @@ ENV VIRTUAL_ENV /env
 ENV PATH /env/bin:$PATH
 
 {% if cookiecutter.django_react == "enabled" -%}
-{%- if cookiecutter.feature_annotations == "on" -%}
-# START_FEATURE django_react
-{%- endif %}
+{% if cookiecutter.feature_annotations == "on" -%}# START_FEATURE django_react{%- endif %}
 COPY ./nwb.config.js /app/nwb.config.js
 COPY ./package.json /app/package.json
 COPY ./package-lock.json /app/package-lock.json
-
 RUN npm install
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE django_react
+{% if cookiecutter.feature_annotations == "on" -%}# END_FEATURE django_react{%- endif %}
 
 {% endif -%}
-{%- endif -%}
+
+
 COPY . /app/
 COPY ./config/.env.example /app/config/.env
 
 {% if cookiecutter.django_react == "enabled" -%}
-{%- if cookiecutter.feature_annotations == "on" -%}
-# START_FEATURE django_react
-{%- endif %}
+{% if cookiecutter.feature_annotations == "on" -%}# START_FEATURE django_react{%- endif %}
 RUN ./node_modules/.bin/nwb build --no-vendor
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE django_react
+{% if cookiecutter.feature_annotations == "on" -%}# END_FEATURE django_react{%- endif %}
 
 {% endif -%}
-{%- endif -%}
-{%- if cookiecutter.sass_bootstrap == "enabled" -%}
-{%- if cookiecutter.feature_annotations == "on" -%}
-# START_FEATURE sass_bootstrap
-{%- endif %}
+
+
+{% if cookiecutter.sass_bootstrap == "enabled" -%}
+{%- if cookiecutter.feature_annotations == "on" -%}# START_FEATURE sass_bootstrap{%- endif %}
 RUN python manage.py compilescss
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE sass_bootstrap
+{% if cookiecutter.feature_annotations == "on" -%}# END_FEATURE sass_bootstrap{%- endif %}
 
 {% endif -%}
-{%- endif -%}
+
 RUN python manage.py collectstatic --noinput
 
 RUN rm /app/config/.env
@@ -69,7 +58,4 @@ RUN rm /app/config/.env
 EXPOSE 8000
 
 CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "config.wsgi:application"]
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE docker
-{%- endif %}
-{%- endif %}
+{% if cookiecutter.feature_annotations == "on" %}# END_FEATURE docker{%- endif %}
