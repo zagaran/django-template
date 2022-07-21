@@ -74,6 +74,14 @@ pip-compile requirements.in --upgrade  # Generate requirements.txt with updated 
 pip-compile requirements-dev.in --upgrade  # Generate requirements-dev.txt with updated dependencies
 ```
 
+# Settings
+
+This project uses [django-environ](https://django-environ.readthedocs.io/en/latest/)
+to read configuration from either `config/.env` (for local development)
+or from environment varables (for server deployments).  For a list of settings,
+see the `environ.Env(` object in [config/settings.py](config/settings.py).
+
+
 {%- if cookiecutter.elastic_beanstalk == "enabled" %}
 # Elastic Beanstalk
 
