@@ -34,7 +34,7 @@ def delete_conditional_paths():
 
 def delete_empty_files():
     exempt_files = ["__init__.py"]
-    file_paths = glob.glob("**", recursive=True) 
+    file_paths = glob.glob("**", recursive=True)
 
     for file_path in file_paths:
         if not path.isfile(file_path):
@@ -57,8 +57,9 @@ def print_next_steps():
     print("Then run the following commands:\n")
     commands = [
         "pip install pip-tools",
-        "pip-compile --upgrade",
-        "pip install -r requirements.txt",
+        "pip-compile requirements.txt --upgrade",
+        "pip-compile requirements-dev.txt --upgrade",
+        "pip install -r requirements-dev.txt",
         "cp config/.env.example config/.env",
         "python manage.py makemigrations",
     ]
