@@ -14,6 +14,8 @@ coverage
 # END_FEATURE elastic_beanstalk
 {%- endif %}
 {%- endif %}
+{%- if cookiecutter.pre_commit == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
 
 # START_FEATURE pre_commit
 {%- endif %}
