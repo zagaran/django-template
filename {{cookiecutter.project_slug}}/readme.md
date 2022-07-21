@@ -21,6 +21,22 @@ pip install -r requirements-dev.txt
 
 # Apply migrations and sync database schema.
 python manage.py migrate
+
+{%- if cookiecutter.django_react == "enabled" or if cookiecutter.sass_bootstrap == "enabled" %}
+# Install Node dependencies
+npm install
+{%- endif %}
+{%- if cookiecutter.sass_bootstrap == "enabled" %}
+
+{% if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE sass_bootstrap
+{%- endif %}
+# Complie SCSS files
+python manage.py compilescss
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE sass_bootstrap
+{%- endif %}
+{%- endif %}
 ```
 
 To run the project:

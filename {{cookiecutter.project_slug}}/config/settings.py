@@ -20,6 +20,7 @@ env = environ.Env(
     DEBUG=(bool, False),
     LOCALHOST=(bool, False),
     MAINTENANCE_MODE=(bool, False),
+    PRODUCTION=(bool, True),
     {%- if cookiecutter.django_react == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
 
@@ -73,8 +74,13 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: do not run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-# run with this set to False in production
+# run with this set to False on server environments
 LOCALHOST = env("LOCALHOST")
+
+# set PRODUCTION to be False on non-production server environments to prevent
+# them from being indexed by search engines and to have a banner warning
+# that this is not the production site
+PRODUCTION = env("PRODUCTION")
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 if LOCALHOST is True:
@@ -207,6 +213,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "common.context_processors.django_settings",
             ],
         },
     },

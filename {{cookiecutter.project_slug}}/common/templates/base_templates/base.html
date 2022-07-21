@@ -81,6 +81,18 @@
         </div>
       </div>
     </nav>
+    {% if not PRODUCTION %}
+    <div class="container-fluid alert alert-danger">
+      <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-10">
+          <h3>Warning</h3>
+          <p>This is a test site.  Do not enter personal or sensitive data on this site.</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    
     {% endraw %}
     {%- if cookiecutter.bootstrap_messages == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" -%}

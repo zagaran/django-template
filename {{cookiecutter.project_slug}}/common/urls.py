@@ -19,6 +19,7 @@ urlpatterns = [
     {%- endif %}
     {%- endif %}
     path("logout", views.LogoutView.as_view(), name="logout")
+    path("robots.txt", views.RobotsTxtView.vas_view(), name="robots_txt")
 ]
 {%- if cookiecutter.debug_toolbar == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
