@@ -1,5 +1,5 @@
 from django.contrib.auth import logout
-from django.config import settings
+from django.conf import settings
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView, View
 from django.http.response import HttpResponse

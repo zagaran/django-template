@@ -1,5 +1,5 @@
 def django_settings(request):
-    from django.config import settings
+    from django.conf import settings
     return {
         "PRODUCTION": settings.PRODUCTION
     }
