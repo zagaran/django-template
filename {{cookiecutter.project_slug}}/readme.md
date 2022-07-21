@@ -70,8 +70,8 @@ To add a new dependency to or update requirements, add the entry to requirements
 ```
 nano requirements.in  # Updating Python dependencies as needed
 nano requirements-dev.in  # Updating Python dev dependencies as needed
-pip-compile requirements.txt --upgrade  # Generate requirements.txt with updated dependencies
-pip-compile requirements-dev.txt --upgrade  # Generate requirements-dev.txt with updated dependencies
+pip-compile requirements.in --upgrade  # Generate requirements.txt with updated dependencies
+pip-compile requirements-dev.in --upgrade  # Generate requirements-dev.txt with updated dependencies
 ```
 
 {%- if cookiecutter.elastic_beanstalk == "enabled" %}

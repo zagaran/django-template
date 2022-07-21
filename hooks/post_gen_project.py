@@ -57,8 +57,8 @@ def print_next_steps():
     print("Then run the following commands:\n")
     commands = [
         "pip install pip-tools",
-        "pip-compile requirements.txt --upgrade",
-        "pip-compile requirements-dev.txt --upgrade",
+        "pip-compile requirements.in --upgrade",
+        "pip-compile requirements-dev.in --upgrade",
         "pip install -r requirements-dev.txt",
         "cp config/.env.example config/.env",
         "python manage.py makemigrations",
