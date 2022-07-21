@@ -22,7 +22,7 @@ pip install -r requirements-dev.txt
 # Apply migrations and sync database schema.
 python manage.py migrate
 
-{%- if cookiecutter.django_react == "enabled" or if cookiecutter.sass_bootstrap == "enabled" %}
+{%- if cookiecutter.django_react == "enabled" or cookiecutter.sass_bootstrap == "enabled" %}
 # Install Node dependencies
 npm install
 {%- endif %}
