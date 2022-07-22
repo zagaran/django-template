@@ -53,8 +53,8 @@ def delete_empty_files():
 def print_next_steps():
     print("\n\nWelcome to your new project.")
     print("\ncd {{cookiecutter.project_slug}}")
-    print("Then set up a virtual environment (https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment)")
-    print("Then run the following commands:\n")
+    print("Set up a virtual environment (https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment)")
+    print("Then run the following commands for first-time setup:\n")
     commands = [
         "pip install pip-tools",
         "pip-compile requirements.in --upgrade",
@@ -65,10 +65,9 @@ def print_next_steps():
     ]
     if "{{ cookiecutter.elastic_beanstalk }}".lower() == "enabled":
         commands.append("git add --chmod=+x -- .platform/*/*/*.sh")
-    if "{{ cookiecutter.django_react }}".lower() == "enabled":
-        commands.append("npm install")
     for command in commands:
         print(command)
+    print("\nSee the README for the rest of the local setup instructions")
 
 
 if __name__ == "__main__":
