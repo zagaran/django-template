@@ -47,18 +47,20 @@ python manage.py runserver_plus
 
 {%- if cookiecutter.django_react == "enabled" %}
 
-To run the frontend with hotloading React assets, set `WEBPACK_LOADER_HOTLOAD=True`
-in `config/.env` and run the following (in addition to `manage.py runserver_plus`):
-```bash
-node_modules/nwb/lib/bin/nwb.js serve
-```
+To run the frontend with hotloading React assets:
+1. Set `WEBPACK_LOADER_HOTLOAD=True` in `config/.env`
+2. Run the following (in addition to `manage.py runserver_plus`):
+    ```bash
+    node_modules/nwb/lib/bin/nwb.js serve
+    ```
 
 To make a static build of the frontend (such as when doing development on
-non-React parts of the codebase), set `WEBPACK_LOADER_HOTLOAD=False` in
-`config/.env` and run the following:
-```bash
-node_modules/nwb/lib/bin/nwb.js build --no-vendor
-```
+non-React parts of the codebase):
+1. Set `WEBPACK_LOADER_HOTLOAD=False` in `config/.env`
+2. Run the following:
+    ```bash
+    node_modules/nwb/lib/bin/nwb.js build --no-vendor
+    ```
 {%- endif %}
 
 To access the database:
