@@ -53,7 +53,7 @@ def delete_empty_files():
 def print_next_steps():
     print("\n\nWelcome to your new project.")
     print("\ncd {{cookiecutter.project_slug}}")
-    print("Set up a virtual environment (https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment)")
+    print("\nSet up a virtual environment (https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment)")
     print("Then run the following commands for first-time setup:\n")
     commands = [
         "pip install pip-tools",

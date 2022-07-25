@@ -12,6 +12,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "webpack-bundle-tracker": "^0.4.3"
+    "@babel/plugin-transform-react-jsx": "~7.16.7"
     {%- endif %}
   },
   {% if cookiecutter.django_react == "enabled" -%}

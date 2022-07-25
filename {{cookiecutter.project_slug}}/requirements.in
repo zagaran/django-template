@@ -43,7 +43,7 @@ crispy-bootstrap5
 # START_FEATURE django_react
 {%- endif %}
 django-react-components
-django-webpack-loader
+django-webpack-loader==0.7.0
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE django_react
 {%- endif %}
