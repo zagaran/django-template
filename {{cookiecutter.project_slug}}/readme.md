@@ -47,9 +47,6 @@ python manage.py runserver_plus
 
 {%- if cookiecutter.django_react == "enabled" %}
 
-{% if cookiecutter.feature_annotations == "on" %}
-# START_FEATURE django_react
-{%- endif %}
 To run the frontend with hotloading React assets, set `WEBPACK_LOADER_HOTLOAD=True`
 in `config/.env` and run the following (in addition to `manage.py runserver_plus`):
 ```bash
@@ -62,9 +59,6 @@ non-React parts of the codebase), set `WEBPACK_LOADER_HOTLOAD=False` in
 ```bash
 node_modules/nwb/lib/bin/nwb.js build --no-vendor
 ```
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE django_react
-{%- endif %}
 {%- endif %}
 
 To access the database:
