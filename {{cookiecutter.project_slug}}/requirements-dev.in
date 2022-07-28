@@ -1,0 +1,38 @@
+-r requirements.in
+-c requirements.txt
+
+werkzeug
+pip-tools
+coverage
+
+####### OPTIONAL FEATURES #######
+{%- if cookiecutter.elastic_beanstalk == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE elastic_beanstalk
+{%- endif %}
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE elastic_beanstalk
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.pre_commit == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE pre_commit
+{%- endif %}
+pre-commit
+flake8
+isort
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE pre_commit
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.debug_toolbar == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE debug_toolbar
+{%- endif %}
+django-debug-toolbar
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE debug_toolbar
+{%- endif %}
+{%- endif %}

@@ -34,7 +34,7 @@ def delete_conditional_paths():
 
 def delete_empty_files():
     exempt_files = ["__init__.py"]
-    file_paths = glob.glob("**", recursive=True) 
+    file_paths = glob.glob("**", recursive=True)
 
     for file_path in file_paths:
         if not path.isfile(file_path):
@@ -53,21 +53,21 @@ def delete_empty_files():
 def print_next_steps():
     print("\n\nWelcome to your new project.")
     print("\ncd {{cookiecutter.project_slug}}")
-    print("Then set up a virtual environment (https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment)")
-    print("Then run the following commands:\n")
+    print("\nSet up a virtual environment (https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment)")
+    print("Then run the following commands for first-time setup:\n")
     commands = [
         "pip install pip-tools",
-        "pip-compile --upgrade",
-        "pip install -r requirements.txt",
+        "pip-compile requirements.in --upgrade",
+        "pip-compile requirements-dev.in --upgrade",
+        "pip install -r requirements-dev.txt",
         "cp config/.env.example config/.env",
         "python manage.py makemigrations",
     ]
     if "{{ cookiecutter.elastic_beanstalk }}".lower() == "enabled":
         commands.append("git add --chmod=+x -- .platform/*/*/*.sh")
-    if "{{ cookiecutter.django_react }}".lower() == "enabled":
-        commands.append("npm install")
     for command in commands:
         print(command)
+    print("\nSee the README for the rest of the local setup instructions")
 
 
 if __name__ == "__main__":

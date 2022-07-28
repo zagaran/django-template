@@ -16,15 +16,23 @@ import environ
 
 
 env = environ.Env(
+    # Sets Django's ALLOWED_HOSTS setting
     ALLOWED_HOSTS=(list, []),
+    # Sets Django's DEBUG setting
     DEBUG=(bool, False),
+    # Set to True when running locally for development purposes
     LOCALHOST=(bool, False),
+    # Set to True in order to put the site in maintenance mode
     MAINTENANCE_MODE=(bool, False),
+    # Set to True on the production server environment; setting to False makes the
+    # site have a "deny all" robots.txt and a non-production warning on all pages
+    PRODUCTION=(bool, True),
     {%- if cookiecutter.django_react == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
 
     # START_FEATURE django_react
     {%- endif %}
+    # Set to True to use JavaScript assets served on localhost:3000 via `nwb serve`
     WEBPACK_LOADER_HOTLOAD=(bool, False),
     {%- if cookiecutter.feature_annotations == "on" %}
     # END_FEATURE django_react
@@ -35,6 +43,7 @@ env = environ.Env(
 
     # START_FEATURE django_ses
     {%- endif %}
+    # Set to configure AWS SES to run in a region other than us-east-1
     AWS_SES_REGION_NAME=(str, "us-east-1"),
     AWS_SES_REGION_ENDPOINT=(str, "email.us-east-1.amazonaws.com"),
     {%- if cookiecutter.feature_annotations == "on" %}
@@ -46,6 +55,7 @@ env = environ.Env(
 
     # START_FEATURE sentry
     {%- endif %}
+    # Set to the DSN from sentry.io to send errors to Sentry
     SENTRY_DSN=(str, None),
     {%- if cookiecutter.feature_annotations == "on" %}
     # END_FEATURE sentry
@@ -56,6 +66,7 @@ env = environ.Env(
 
     # START_FEATURE debug_toolbar
     {%- endif %}
+    # Set to True to enable the Django Debug Toolbar
     DEBUG_TOOLBAR=(bool, False),
     {%- if cookiecutter.feature_annotations == "on" %}
     # END_FEATURE debug_toolbar
@@ -73,8 +84,13 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: do not run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-# run with this set to False in production
+# run with this set to False on server environments
 LOCALHOST = env("LOCALHOST")
+
+# set PRODUCTION to be False on non-production server environments to prevent
+# them from being indexed by search engines and to have a banner warning
+# that this is not the production site
+PRODUCTION = env("PRODUCTION")
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 if LOCALHOST is True:
@@ -207,6 +223,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "common.context_processors.django_settings",
             ],
         },
     },
