@@ -3,6 +3,7 @@ django-environ
 django-extensions
 requests
 psycopg2
+pytest
 {%- if cookiecutter.feature_annotations == "on" %}
 
 ####### OPTIONAL FEATURES #######
