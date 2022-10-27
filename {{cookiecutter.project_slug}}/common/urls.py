@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import re_path
 from django.urls import include, path
 
 from common import views
@@ -30,7 +30,7 @@ if settings.DEBUG_TOOLBAR:
     import debug_toolbar
 
     urlpatterns += [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        re_path(r'^__debug__/', include(debug_toolbar.urls)),
     ]
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE debug_toolbar

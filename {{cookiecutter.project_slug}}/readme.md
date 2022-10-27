@@ -73,6 +73,11 @@ To run the test suite:
 python manage.py test
 ```
 
+To run pytest tests:
+```bash
+pytest
+```
+
 To get a test coverage report:
 ```bash
 coverage run --source='.' manage.py test; coverage report
