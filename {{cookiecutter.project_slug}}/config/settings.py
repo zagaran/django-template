@@ -73,7 +73,11 @@ env = environ.Env(
     {%- endif %}
     {%- endif %}
 )
-environ.Env.read_env()
+# If ALLWED_HOSTS has been configured, then we're running on a server and
+# can skip looking for a .env file (this assumes that .env files
+# file is only used for local development and servers use environment variables)
+if not env.ALLOWED_HOSTS:
+    environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
