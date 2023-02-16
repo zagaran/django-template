@@ -173,7 +173,6 @@ THIRD_PARTY_APPS = [
     {%- endif %}
     {%- endif %}
 ]
-
 {%- if cookiecutter.debug_toolbar == "enabled" %}
 
 {% if cookiecutter.feature_annotations == "on" %}
