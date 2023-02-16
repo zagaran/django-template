@@ -174,17 +174,17 @@ THIRD_PARTY_APPS = [
     {%- endif %}
 ]
 
-{ % - if cookiecutter.debug_toolbar == "enabled" %}
+{%- if cookiecutter.debug_toolbar == "enabled" %}
 
-{ % if cookiecutter.feature_annotations == "on" %}
+{% if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE debug_toolbar
-{ % - endif %}
+{%- endif %}
 if DEBUG_TOOLBAR:
     THIRD_PARTY_APPS += ["debug_toolbar"]
-{ % - if cookiecutter.feature_annotations == "on" %}
+{%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE debug_toolbar
-{ % - endif %}
-{ % - endif %}
+{%- endif %}
+{%- endif %}
 
 LOCAL_APPS = [
     "common",
