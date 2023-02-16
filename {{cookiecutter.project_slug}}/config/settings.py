@@ -88,7 +88,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: do not run with debug turned on in production!
 DEBUG = env("DEBUG")
 {%- if cookiecutter.debug_toolbar == "enabled" %}
-{% if cookiecutter.feature_annotations == "on" %}
+{%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE debug_toolbar
 {%- endif %}
 DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
