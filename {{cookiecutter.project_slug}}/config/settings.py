@@ -87,6 +87,15 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: do not run with debug turned on in production!
 DEBUG = env("DEBUG")
+{%- if cookiecutter.debug_toolbar == "enabled" %}
+{% if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE debug_toolbar
+{%- endif %}
+DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE debug_toolbar
+{%- endif %}
+{%- endif %}
 
 # run with this set to False on server environments
 LOCALHOST = env("LOCALHOST")
@@ -153,16 +162,6 @@ THIRD_PARTY_APPS = [
     # END_FEATURE django_react
     {%- endif %}
     {%- endif %}
-    {%- if cookiecutter.debug_toolbar == "enabled" %}
-    {%- if cookiecutter.feature_annotations == "on" %}
-
-    # START_FEATURE debug_toolbar
-    {%- endif %}
-    "debug_toolbar",
-    {%- if cookiecutter.feature_annotations == "on" %}
-    # END_FEATURE debug_toolbar
-    {%- endif %}
-    {%- endif %}
     {%- if cookiecutter.sass_bootstrap == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
 
@@ -174,6 +173,18 @@ THIRD_PARTY_APPS = [
     {%- endif %}
     {%- endif %}
 ]
+
+{ % - if cookiecutter.debug_toolbar == "enabled" %}
+{ % - if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE debug_toolbar
+{ % - endif %}
+if DEBUG_TOOLBAR:
+    THIRD_PARTY_APPS += ["debug_toolbar"]
+{ % - if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE debug_toolbar
+{ % - endif %}
+{ % - endif %}
 
 LOCAL_APPS = [
     "common",
@@ -406,7 +417,6 @@ else:
 {% if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE debug_toolbar
 {%- endif %}
-DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
 INTERNAL_IPS = ['127.0.0.1']
 if DEBUG_TOOLBAR:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
