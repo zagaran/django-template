@@ -175,8 +175,8 @@ THIRD_PARTY_APPS = [
 ]
 
 { % - if cookiecutter.debug_toolbar == "enabled" %}
-{ % - if cookiecutter.feature_annotations == "on" %}
 
+{ % if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE debug_toolbar
 { % - endif %}
 if DEBUG_TOOLBAR:
