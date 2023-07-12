@@ -18,7 +18,19 @@
 {% block title %}Home{% endblock %}
 
 {% block head %}
+{% endraw %}
+{%- if cookiecutter.sass_bootstrap == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+{% raw %}{# START_FEATURE sass_bootstrap #}{% endraw %}
+{%- endif %}
+{%- raw %}
   <link href="{% sass_src 'styles/pages/index.scss' %}" rel="stylesheet">
+{%- endraw %}
+{%- if cookiecutter.feature_annotations == "on" %}
+{% raw %}{# END_FEATURE sass_bootstrap #}{% endraw %}
+{%- endif %}
+{%- endif %}
+{%- raw %}
 {% endblock %}
 
 {% block body %}

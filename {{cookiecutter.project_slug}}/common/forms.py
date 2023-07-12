@@ -22,3 +22,33 @@ class CrispyFormMixin(object):
 # END_FEATURE crispy_forms
 {%- endif %}
 {%- endif %}
+
+
+{%- if cookiecutter.reference_examples == "on" %}
+{%- if cookiecutter.crispy_forms == "enabled" %}
+
+{% if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE crispy_forms
+{%- endif %}
+class SampleForm(forms.Form, CrispyFormMixin):
+    # TODO: delete me; this is just a reference example
+    is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
+    email = forms.EmailField(
+        label="email", max_length=30, required=True, widget=forms.TextInput(), help_text="Insert your email"
+    )
+    first_name = forms.CharField(label="first name", max_length=5, required=True, widget=forms.TextInput())
+    last_name = forms.CharField(label="last name", max_length=5, required=True, widget=forms.TextInput())
+    datetime_field = forms.SplitDateTimeField(label="date time", widget=forms.SplitDateTimeWidget())
+
+    def clean(self):
+        super().clean()
+        password1 = self.cleaned_data.get("password1", None)
+        password2 = self.cleaned_data.get("password2", None)
+        if not password1 and not password2 or password1 != password2:
+            raise forms.ValidationError("Passwords dont match")
+        return self.cleaned_data
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE crispy_forms
+{%- endif %}
+{%- endif %}
+{%- endif %}
