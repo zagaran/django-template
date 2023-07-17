@@ -416,10 +416,8 @@ else:
 {% if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE debug_toolbar
 {%- endif %}
-DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
 INTERNAL_IPS = ["127.0.0.1"]
 if DEBUG_TOOLBAR:
-    INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE debug_toolbar
