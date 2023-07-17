@@ -153,16 +153,6 @@ THIRD_PARTY_APPS = [
     # END_FEATURE django_react
     {%- endif %}
     {%- endif %}
-    {%- if cookiecutter.debug_toolbar == "enabled" %}
-    {%- if cookiecutter.feature_annotations == "on" %}
-
-    # START_FEATURE debug_toolbar
-    {%- endif %}
-    "debug_toolbar",
-    {%- if cookiecutter.feature_annotations == "on" %}
-    # END_FEATURE debug_toolbar
-    {%- endif %}
-    {%- endif %}
     {%- if cookiecutter.sass_bootstrap == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
 
@@ -407,9 +397,10 @@ else:
 # START_FEATURE debug_toolbar
 {%- endif %}
 DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
-INTERNAL_IPS = ['127.0.0.1']
+INTERNAL_IPS = ["127.0.0.1"]
 if DEBUG_TOOLBAR:
-    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    INSTALLED_APPS.append("debug_toolbar")
+    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE debug_toolbar
 {%- endif %}
@@ -420,11 +411,11 @@ if DEBUG_TOOLBAR:
 # START_FEATURE django_react
 {%- endif %}
 if DEBUG:
-    WEBPACK_LOADER_HOTLOAD = env('WEBPACK_LOADER_HOTLOAD')
+    WEBPACK_LOADER_HOTLOAD = env("WEBPACK_LOADER_HOTLOAD")
     if WEBPACK_LOADER_HOTLOAD:
         WEBPACK_LOADER = {
-            'DEFAULT': {
-                'LOADER_CLASS': "config.webpack_loader.DynamicWebpackLoader"
+            "DEFAULT": {
+                "LOADER_CLASS": "config.webpack_loader.DynamicWebpackLoader"
             }
         }
 {%- if cookiecutter.feature_annotations == "on" %}
