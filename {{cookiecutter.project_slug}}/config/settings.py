@@ -76,7 +76,7 @@ env = environ.Env(
 # If ALLWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
 # file is only used for local development and servers use environment variables)
-if not env.ALLOWED_HOSTS:
+if not env("ALLOWED_HOSTS"):
     environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -416,9 +416,9 @@ else:
 {% if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE debug_toolbar
 {%- endif %}
-INTERNAL_IPS = ['127.0.0.1']
+INTERNAL_IPS = ["127.0.0.1"]
 if DEBUG_TOOLBAR:
-    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE debug_toolbar
 {%- endif %}
@@ -429,11 +429,11 @@ if DEBUG_TOOLBAR:
 # START_FEATURE django_react
 {%- endif %}
 if DEBUG:
-    WEBPACK_LOADER_HOTLOAD = env('WEBPACK_LOADER_HOTLOAD')
+    WEBPACK_LOADER_HOTLOAD = env("WEBPACK_LOADER_HOTLOAD")
     if WEBPACK_LOADER_HOTLOAD:
         WEBPACK_LOADER = {
-            'DEFAULT': {
-                'LOADER_CLASS': "config.webpack_loader.DynamicWebpackLoader"
+            "DEFAULT": {
+                "LOADER_CLASS": "config.webpack_loader.DynamicWebpackLoader"
             }
         }
 {%- if cookiecutter.feature_annotations == "on" %}

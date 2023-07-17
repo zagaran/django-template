@@ -9,7 +9,7 @@ from django.http.response import HttpResponse
 {%- endif %}
 from django.views.generic.edit import FormView
 
-from crispy_forms.tests.forms import SampleForm
+from common.forms import SampleForm
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE crispy_forms
 {%- endif %}
@@ -24,8 +24,6 @@ class LogoutView(View):
     def post(self, request):
         logout(request)
         return redirect("index")
-{%- if cookiecutter.reference_examples == "on" %}
-{%- if cookiecutter.django_react == "enabled" %}
 
 
 class RobotsTxtView(View):
@@ -36,7 +34,10 @@ class RobotsTxtView(View):
         else:
             # Block all
             lines = ["User-agent: *", "Disallow: /"]
-        return  HttpResponse("\n".join(lines), content_type="text/plain")
+        return HttpResponse("\n".join(lines), content_type="text/plain")
+{%- if cookiecutter.reference_examples == "on" %}
+{%- if cookiecutter.django_react == "enabled" %}
+
 
 {% if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE django_react

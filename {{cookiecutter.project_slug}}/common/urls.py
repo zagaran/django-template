@@ -27,10 +27,8 @@ urlpatterns = [
 # START_FEATURE debug_toolbar
 {%- endif %}
 if settings.DEBUG_TOOLBAR:
-    import debug_toolbar
-
     urlpatterns += [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        path("__debug__/", include("debug_toolbar.urls")),
     ]
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE debug_toolbar
