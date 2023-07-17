@@ -87,6 +87,15 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: do not run with debug turned on in production!
 DEBUG = env("DEBUG")
+{%- if cookiecutter.debug_toolbar == "enabled" %}
+{% if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE debug_toolbar
+{%- endif %}
+DEBUG_TOOLBAR = DEBUG and env("DEBUG_TOOLBAR")
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE debug_toolbar
+{%- endif %}
+{%- endif %}
 
 # run with this set to False on server environments
 LOCALHOST = env("LOCALHOST")
@@ -164,6 +173,17 @@ THIRD_PARTY_APPS = [
     {%- endif %}
     {%- endif %}
 ]
+{%- if cookiecutter.debug_toolbar == "enabled" %}
+
+{% if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE debug_toolbar
+{%- endif %}
+if DEBUG_TOOLBAR:
+    THIRD_PARTY_APPS += ["debug_toolbar"]
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE debug_toolbar
+{%- endif %}
+{%- endif %}
 
 LOCAL_APPS = [
     "common",
