@@ -30,7 +30,7 @@ class CrispyFormMixin(object):
 {% if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE crispy_forms
 {%- endif %}
-class SampleForm(forms.Form, CrispyFormMixin):
+class SampleForm(CrispyFormMixin, forms.Form):
     # TODO: delete me; this is just a reference example
     is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
     email = forms.EmailField(
