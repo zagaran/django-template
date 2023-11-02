@@ -6,7 +6,7 @@ source $PYTHONPATH/activate
 
 {% if cookiecutter.django_react == "enabled" or cookiecutter.sass_bootstrap == "enabled" -%}
 {%- if cookiecutter.feature_annotations == "on" -%}# START_FEATURE django_react, sass_bootstrap{%- endif %}
-npm install --production
+NODE_OPTIONS=--max_old_space_size=1000 npm install --production
 {% if cookiecutter.feature_annotations == "on" -%}# END_FEATURE django_react, sass_bootstrap{%- endif %}
 {%- endif %}
 
@@ -15,7 +15,7 @@ npm install --production
 # delete old webpack static resources
 rm -rf static/webpack_bundles/ || echo "no webpack bundles to remove"
 rm -rf staticfiles/webpack_bundles/ || echo "no staticfiles webpack bundles to remove"
-$(npm bin)/nwb build --no-vendor
+NODE_OPTIONS=--openssl-legacy-provider node_modules/.bin/nwb build --no-vendor
 {% if cookiecutter.feature_annotations == "on" -%}# END_FEATURE django_react{%- endif %}
 {%- endif %}
 
