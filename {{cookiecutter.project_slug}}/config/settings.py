@@ -204,7 +204,7 @@ MIDDLEWARE = [
     {%- if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE user_action_tracking
     {%- endif %}
-    "common.middleware.UserActionTrackingMiddleware"
+    "common.middleware.UserActionTrackingMiddleware",
     {%- if cookiecutter.feature_annotations == "on" %}
     # END_FEATURE user_action_tracking
     {%- endif %}
