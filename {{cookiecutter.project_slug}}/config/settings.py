@@ -405,6 +405,7 @@ else:
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE django_storages
+{%- endif %}
 {%- else %}
 DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 {%- endif %}
