@@ -396,13 +396,18 @@ MESSAGE_TAGS = {
 {%- endif %}
 
 {%- if cookiecutter.django_storages == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
+
+{% if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE django_storages
 {%- endif %}
-if LOCALHOST:
+if LOCALHOST is True:
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    MEDIA_ROOT = ""
 else:
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_DEFAULT_ACL = "private"
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE django_storages
 {%- endif %}
@@ -440,20 +445,6 @@ STATICFILES_FINDERS = [
     'sass_processor.finders.CssFinder',
 ]
 
-{%- if cookiecutter.django_storages == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
-# START_FEATURE django_storages
-{%- endif %}
-if LOCALHOST is True:
-    MEDIA_ROOT = ""
-else:
-    AWS_DEFAULT_ACL = "private"
-    AWS_S3_FILE_OVERWRITE = False
-    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE django_storages
-{%- endif %}
-{%- endif %}
 {%- if cookiecutter.debug_toolbar == "enabled" %}
 
 {% if cookiecutter.feature_annotations == "on" %}
