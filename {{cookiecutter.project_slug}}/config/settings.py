@@ -401,10 +401,10 @@ MESSAGE_TAGS = {
 # START_FEATURE django_storages
 {%- endif %}
 if LOCALHOST is True:
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    STORAGE_BACKEND_DEFAULT = "django.core.files.storage.FileSystemStorage"
     MEDIA_ROOT = ""
 else:
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    STORAGE_BACKEND_DEFAULT = "storages.backends.s3boto3.S3Boto3Storage"
     AWS_DEFAULT_ACL = "private"
     AWS_S3_FILE_OVERWRITE = False
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
@@ -412,11 +412,11 @@ else:
 # END_FEATURE django_storages
 {%- endif %}
 {%- else %}
-DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+STORAGE_BACKEND_DEFAULT = "django.core.files.storage.FileSystemStorage"
 {%- endif %}
 STORAGES = {
     "default": {
-        "BACKEND": DEFAULT_FILE_STORAGE,
+        "BACKEND": STORAGE_BACKEND_DEFAULT,
     },
     {%- if cookiecutter.sass_bootstrap == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
@@ -435,7 +435,7 @@ STORAGES = {
     {%- endif %}
     {%- endif %}
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
     },
 }
 
