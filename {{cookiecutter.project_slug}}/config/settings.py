@@ -395,23 +395,25 @@ MESSAGE_TAGS = {
 {%- endif %}
 {%- endif %}
 
+{%- if cookiecutter.django_storages == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE django_storages
+{%- endif %}
+if LOCALHOST:
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+else:
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE django_storages
+{%- else %}
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+{%- endif %}
 STORAGES = {
     "default": {
-        {%- if cookiecutter.django_storages == "enabled" %}
-
-        {% if cookiecutter.feature_annotations == "on" %}
-        # START_FEATURE django_storages
-        {%- endif %}
-        "BACKEND": "django.core.files.storage.FileSystemStorage" if LOCALHOST is True else "storages.backends.s3boto3.S3Boto3Storage",
-        {%- if cookiecutter.feature_annotations == "on" %}
-        # END_FEATURE django_storages
-        {%- endif %}
-        {% else %}
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-        {%- endif %}
+        "BACKEND": DEFAULT_FILE_STORAGE,
     },
     {%- if cookiecutter.sass_bootstrap == "enabled" %}
-    {% if cookiecutter.feature_annotations == "on" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE sass_bootstrap
     {%- endif %}
     "sass_processor": {
@@ -430,6 +432,7 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -437,8 +440,7 @@ STATICFILES_FINDERS = [
 ]
 
 {%- if cookiecutter.django_storages == "enabled" %}
-
-{% if cookiecutter.feature_annotations == "on" %}
+{%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE django_storages
 {%- endif %}
 if LOCALHOST is True:
