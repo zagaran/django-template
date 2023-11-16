@@ -416,7 +416,7 @@ else:
 # END_FEATURE django_storages
 {%- endif %}
 {%- else %}
-STORAGE_BACKEND_DEFAULT = "django.core.files.storage.FileSystemStorage"
+DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
 {%- endif %}
 STORAGES = {
     "default": DEFAULT_STORAGE,
