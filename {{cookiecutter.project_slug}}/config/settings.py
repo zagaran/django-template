@@ -401,13 +401,16 @@ MESSAGE_TAGS = {
 # START_FEATURE django_storages
 {%- endif %}
 if LOCALHOST is True:
-    STORAGE_BACKEND_DEFAULT = "django.core.files.storage.FileSystemStorage"
+    DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
     MEDIA_ROOT = ""
 else:
-    STORAGE_BACKEND_DEFAULT = "storages.backends.s3boto3.S3Boto3Storage"
-    AWS_DEFAULT_ACL = "private"
-    AWS_S3_FILE_OVERWRITE = False
-    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+    DEFAULT_STORAGE = {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "bucket_name": env("AWS_STORAGE_BUCKET_NAME"),
+            "file_overwrite": False,
+            "default_acl": "private",
+    }
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE django_storages
 {%- endif %}
@@ -415,9 +418,7 @@ else:
 STORAGE_BACKEND_DEFAULT = "django.core.files.storage.FileSystemStorage"
 {%- endif %}
 STORAGES = {
-    "default": {
-        "BACKEND": STORAGE_BACKEND_DEFAULT,
-    },
+    "default": DEFAULT_STORAGE,
     {%- if cookiecutter.sass_bootstrap == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE sass_bootstrap
