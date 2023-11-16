@@ -410,6 +410,7 @@ else:
             "bucket_name": env("AWS_STORAGE_BUCKET_NAME"),
             "file_overwrite": False,
             "default_acl": "private",
+        }
     }
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE django_storages
