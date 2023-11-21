@@ -121,6 +121,22 @@ To do create a new Elastic Beanstalk environment, modify the contents of [.elast
 
 See the docs for [eb-create-environment](https://github.com/zagaran/eb-create-environment/) for more details.
 
+Then, add the following environment variables:
+```
+ALLOWED_HOSTS
+SECRET_KEY
+{%- if cookiecutter.django_storages == "enabled" %}
+AWS_STORAGE_BUCKET_NAME
+{%- endif %}
+{%- if cookiecutter.django_social == "enabled" %}
+GOOGLE_OAUTH2_KEY
+GOOGLE_OAUTH2_SECRET
+{%- endif %}
+{%- if cookiecutter.sentry == "enabled" %}
+SENTRY_DSN
+{%- endif %}
+```
+
 Following that, deploy your code to the environment (see below).
 
 ## Deploying code
