@@ -113,3 +113,6 @@ libsass
 
 # Convenience
 ipython
+{%- if cookiecutter.debug_toolbar == "on" %}
+django-debug-toolbar
+{%- endif %}
