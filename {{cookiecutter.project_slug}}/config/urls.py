@@ -20,7 +20,9 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    {%- if cookiecutter.django_social == "enabled" %}
     path("oauth/", include("social_django.urls", namespace="social")),
+    {%- endif %}
     path('', include("common.urls")),
     path("health-check/", lambda request: HttpResponse("ok")),
 ]

@@ -3,7 +3,9 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+{%- if cookiecutter.django_social == "enabled" -%}
 from common.managers import UserManager
+{%- endif %}
 
 
 class TimestampedModel(models.Model):
@@ -78,6 +80,7 @@ class UploadFile(TimestampedModel):
 
 # START_FEATURE user_action_tracking
 {%- endif %}
+
 class UserAction(TimestampedModel):
     user = models.ForeignKey(User, related_name="user_actions", on_delete=models.PROTECT)
     url = models.URLField(max_length=2083)
