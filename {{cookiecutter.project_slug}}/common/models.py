@@ -81,7 +81,6 @@ class UploadFile(TimestampedModel):
 
 # START_FEATURE user_action_tracking
 {%- endif %}
-
 class UserAction(TimestampedModel):
     user = models.ForeignKey(User, related_name="user_actions", on_delete=models.PROTECT)
     url = models.URLField(max_length=2083)
