@@ -3,7 +3,9 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+{% if cookiecutter.django_social == "enabled" -%}
 from common.managers import UserManager
+{%- endif %}
 
 
 class TimestampedModel(models.Model):
@@ -57,6 +59,7 @@ def get_s3_path(instance, filename):
         instance.user_id,
         filename,
     )
+
 
 class UploadFile(TimestampedModel):
     user = models.ForeignKey(User, related_name="files", on_delete=models.PROTECT)

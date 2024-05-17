@@ -9,7 +9,9 @@ from django.http.response import HttpResponse
 {%- endif %}
 from django.views.generic.edit import FormView
 
+{%- if cookiecutter.reference_examples == "on" %}
 from common.forms import SampleForm
+{%- endif %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE crispy_forms
 {%- endif %}

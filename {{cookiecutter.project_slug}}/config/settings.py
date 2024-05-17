@@ -108,8 +108,8 @@ PRODUCTION = env("PRODUCTION")
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 if LOCALHOST is True:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-else:
     {%- if cookiecutter.elastic_beanstalk == "enabled" %}
+else:
     {%- if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE elastic_beanstalk
     {%- endif %}
