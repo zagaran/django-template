@@ -1,7 +1,7 @@
 /**
  * Base app index
  */
-{%- if cookiecutter.reference_examples == "on" -%}
+{% if cookiecutter.reference_examples == "on" -%}
 // TODO: delete me; this is just a reference example
 .does-nothing-button {
   &:focus {

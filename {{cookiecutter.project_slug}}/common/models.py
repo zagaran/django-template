@@ -3,7 +3,7 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-{%- if cookiecutter.django_social == "enabled" -%}
+{% if cookiecutter.django_social == "enabled" -%}
 from common.managers import UserManager
 {%- endif %}
 
