@@ -14,14 +14,16 @@ Then run the following:
 
 ```
 pip install pip-tools
-pip-compile --upgrade
-pip install -r requirements.txt
+pip-compile requirements.in --upgrade
+pip-compile requirements-dev.in --upgrade
+pip install -r requirements-dev.txt
 cp config/.env.example config/.env
 python manage.py makemigrations
 
-# If using the `django_react` feature
-npm install -g npm-check-updates
+# If using the `elastic_beanstalk` feature
+git add --chmod=+x -- .platform///*.sh
 
+# Then see the generated README in your new project for the rest of the local setup instructions
 ```
 
 If you have an existing project, you can see a project based on this template here: https://github.com/zagaran/sample-django-app
