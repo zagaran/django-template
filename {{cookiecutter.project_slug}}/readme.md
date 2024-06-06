@@ -135,6 +135,9 @@ GOOGLE_OAUTH2_SECRET
 {%- if cookiecutter.sentry == "enabled" %}
 SENTRY_DSN
 {%- endif %}
+{%- if cookiecutter.django_ses == "enabled" %}
+DEFAULT_FROM_EMAIL
+{%- endif %}
 ```
 
 Following that, deploy your code to the environment (see below).
