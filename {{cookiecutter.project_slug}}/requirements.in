@@ -7,15 +7,6 @@ psycopg2
 
 ####### OPTIONAL FEATURES #######
 {%- endif %}
-{%- if cookiecutter.elastic_beanstalk == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
-# START_FEATURE elastic_beanstalk
-{%- endif %}
-ec2_metadata
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE elastic_beanstalk
-{%- endif %}
-{%- endif %}
 {%- if cookiecutter.django_social == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 

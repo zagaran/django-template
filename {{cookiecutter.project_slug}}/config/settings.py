@@ -110,16 +110,6 @@ if LOCALHOST is True:
     {%- if cookiecutter.elastic_beanstalk == "enabled" %}
 else:
     ALLOWED_HOSTS.append("localhost")
-    {%- if cookiecutter.feature_annotations == "on" %}
-    # START_FEATURE elastic_beanstalk
-    {%- endif %}
-    # if using AWS hosting
-    from ec2_metadata import ec2_metadata
-    ALLOWED_HOSTS.append(ec2_metadata.private_ipv4)
-    {%- if cookiecutter.feature_annotations == "on" %}
-    # END_FEATURE elastic_beanstalk
-    {%- endif %}
-    {%- endif %}
 
 # Application definition
 THIRD_PARTY_APPS = [
