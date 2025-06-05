@@ -1,4 +1,4 @@
-Django==4.2.*  # Latest LTS version
+Django==5.2.*  # Latest LTS version
 django-environ
 django-extensions>=3.2
 requests
@@ -6,15 +6,6 @@ psycopg2
 {%- if cookiecutter.feature_annotations == "on" %}
 
 ####### OPTIONAL FEATURES #######
-{%- endif %}
-{%- if cookiecutter.elastic_beanstalk == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
-# START_FEATURE elastic_beanstalk
-{%- endif %}
-ec2_metadata
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE elastic_beanstalk
-{%- endif %}
 {%- endif %}
 {%- if cookiecutter.django_social == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}

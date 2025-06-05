@@ -8,11 +8,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import environ
 import os
 
 from django.contrib.messages import constants as messages
-
-import environ
 
 
 env = environ.Env(
@@ -108,18 +107,8 @@ PRODUCTION = env("PRODUCTION")
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 if LOCALHOST is True:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-    {%- if cookiecutter.elastic_beanstalk == "enabled" %}
 else:
-    {%- if cookiecutter.feature_annotations == "on" %}
-    # START_FEATURE elastic_beanstalk
-    {%- endif %}
-    # if using AWS hosting
-    from ec2_metadata import ec2_metadata
-    ALLOWED_HOSTS.append(ec2_metadata.private_ipv4)
-    {%- if cookiecutter.feature_annotations == "on" %}
-    # END_FEATURE elastic_beanstalk
-    {%- endif %}
-    {%- endif %}
+    ALLOWED_HOSTS.append("localhost")
 
 # Application definition
 THIRD_PARTY_APPS = [
@@ -192,6 +181,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
+    "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
