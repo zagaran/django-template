@@ -8,11 +8,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import environ
 import os
 
 from django.contrib.messages import constants as messages
-
-import environ
 
 
 env = environ.Env(
@@ -110,6 +109,7 @@ if LOCALHOST is True:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
     {%- if cookiecutter.elastic_beanstalk == "enabled" %}
 else:
+    ALLOWED_HOSTS.append("localhost")
     {%- if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE elastic_beanstalk
     {%- endif %}
@@ -192,6 +192,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
+    "common.middleware.health_check.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
