@@ -181,7 +181,7 @@ LOCAL_APPS = [
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
-    "common.middleware.health_check.HealthCheckMiddleware",
+    "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
