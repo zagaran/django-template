@@ -9,6 +9,8 @@
   "crispy_forms":           ["enabled", "disabled"],
   "debug_toolbar":          ["enabled", "disabled"],
   "django_react":           ["enabled", "disabled"],
+  "vue":                    ["enabled", "disabled"],
+  "direct_upload":          ["enabled", "disabled"],
   "django_ses":             ["enabled", "disabled"],
   "django_social":          ["enabled", "disabled"],
   "django_storages":        ["enabled", "disabled"],

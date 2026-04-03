@@ -52,3 +52,13 @@ class SampleForm(CrispyFormMixin, forms.Form):
 {%- endif %}
 {%- endif %}
 {%- endif %}
+
+from django.db.models import Model
+
+class ActionFormMixin:
+    instance: type[Model]
+    action_title: str = "Perform Action"
+
+    @property
+    def action_title_formatted(self):
+        return self.action_title.format(instance=self.instance)
