@@ -1,4 +1,8 @@
-{# START_FEATURE direct_upload #}
+{%- if cookiecutter.direct_upload == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" -%}
+{% raw %}{# START_FEATURE direct_upload #}{% endraw %}
+{%- endif %}
+{%- raw %}
 <div id="app-{{ widget.id }}" class="card">
   <div class="card-body">
     <file-upload-dashboard
@@ -15,4 +19,8 @@
     ></file-upload-dashboard>
   </div>
 </div>
-{# END_FEATURE direct_upload #}
+{%- endraw %}
+{%- if cookiecutter.feature_annotations == "on" -%}
+{% raw %}{# END_FEATURE direct_upload #}{% endraw %}
+{%- endif %}
+{%- endif %}

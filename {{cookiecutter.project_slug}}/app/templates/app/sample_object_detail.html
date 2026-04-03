@@ -1,6 +1,7 @@
+{%- raw %}
 {% extends "base_templates/base.html" %}
 
-{% block title %}Sample Object {{sample_object.name }}{% endblock %}
+{% block title %}Sample Object {{ sample_object.name }}{% endblock %}
 
 {% block body %}
 <div id="app" class="d-flex flex-column">
@@ -36,7 +37,12 @@
     </div>
   </div>
 
-  {# START_FEATURE direct_upload #}
+  {% endraw %}
+  {%- if cookiecutter.direct_upload == "enabled" %}
+  {%- if cookiecutter.feature_annotations == "on" -%}
+  {% raw %}{# START_FEATURE direct_upload #}{% endraw %}
+  {%- endif %}
+  {%- raw %}
   <div class="my-4 card">
     <div class="card-body">
       <h4 class="card-title">Attachments</h4>
@@ -49,6 +55,12 @@
       ></file-upload-dashboard>
     </div>
   </div>
+  {% endraw %}
+  {%- if cookiecutter.feature_annotations == "on" -%}
+  {% raw %}{# END_FEATURE direct_upload #}{% endraw %}
+  {%- endif %}
+  {%- endif %}
+  {%- raw %}
 </div>
-{# END_FEATURE direct_upload #}
 {% endblock %}
+{%- endraw %}

@@ -56,9 +56,19 @@
                 <th>Name</th>
                 <th>Created By</th>
                 <th>Created On</th>
-                {% raw %}{# START_FEATURE direct_upload #}{% raw %}
+                {% endraw %}
+                {%- if cookiecutter.direct_upload == "enabled" %}
+                {%- if cookiecutter.feature_annotations == "on" -%}
+                {% raw %}{# START_FEATURE direct_upload #}{% endraw %}
+                {%- endif %}
+                {%- raw %}
                 <th>Attachments</th>
-                {% raw %}{# END_FEATURE direct_upload #}{% raw %}
+                {% endraw %}
+                {%- if cookiecutter.feature_annotations == "on" -%}
+                {% raw %}{# END_FEATURE direct_upload #}{% endraw %}
+                {%- endif %}
+                {%- endif %}
+                {%- raw %}
                 <th>Actions</th>
               </tr>
             </thead>
@@ -68,7 +78,12 @@
                 <td>{{ sample_object.name }}</td>
                 <td>{{ sample_object.created_by }}</td>
                 <td>{{ sample_object.created_on }}</td>
-                {% raw %}{# START_FEATURE direct_upload #}{% raw %}
+                {% endraw %}
+                {%- if cookiecutter.direct_upload == "enabled" %}
+                {%- if cookiecutter.feature_annotations == "on" -%}
+                {% raw %}{# START_FEATURE direct_upload #}{% endraw %}
+                {%- endif %}
+                {%- raw %}
                 <td>
                   {% for attachment in sample_object.get_attachments %}
                   {% if not attachment.deleted_on %}
@@ -76,6 +91,12 @@
                   {% endif %}
                   {% endfor %}
                 </td>
+                {% endraw %}
+                {%- if cookiecutter.feature_annotations == "on" -%}
+                {% raw %}{# END_FEATURE direct_upload #}{% endraw %}
+                {%- endif %}
+                {%- endif %}
+                {%- raw %}
                 <td>
                   <div class="d-flex gap-2">
                     <a href="{% url 'sample-object' sample_object.id %}">
@@ -86,7 +107,6 @@
                     </a>
                   </div>
                 </td>
-                {% raw %}{# END_FEATURE direct_upload #}{% raw %}
               </tr>
               {% endfor %}
             </tbody>
@@ -101,7 +121,12 @@
       </div>
     </div>
 
-    {% raw %}{# START_FEATURE direct_upload #}{% raw %}
+    {% endraw %}
+    {%- if cookiecutter.direct_upload == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" -%}
+    {% raw %}{# START_FEATURE direct_upload #}{% endraw %}
+    {%- endif %}
+    {%- raw %}
     <div class="my-4 card">
       <div class="card-body">
         <h3 class="card-title">All Attachments</h3>
@@ -113,6 +138,12 @@
         ></file-upload-dashboard>
       </div>
     </div>
-    {% raw %}{# END_FEATURE direct_upload #}{% raw %}
+    {% endraw %}
+    {%- if cookiecutter.feature_annotations == "on" -%}
+    {% raw %}{# END_FEATURE direct_upload #}{% endraw %}
+    {%- endif %}
+    {%- endif %}
+    {%- raw %}
   </div>
 {% endblock %}
+{%- endraw %}
