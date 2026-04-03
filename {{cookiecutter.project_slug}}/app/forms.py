@@ -15,6 +15,7 @@ class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
     # START_FEATURE direct_upload
     {%- endif %}
     attachments = DirectUploadFileField(queryset=Attachment.objects.filter(deleted_on=None), required=False)
+
     {%- if cookiecutter.feature_annotations == "on" -%}
     # END_FEATURE direct_upload
     {%- endif -%}
@@ -35,6 +36,7 @@ class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
         # START_FEATURE direct_upload
         {%- endif -%}
         "attachments",
+
         {%- if cookiecutter.feature_annotations == "on" -%}
         # END_FEATURE direct_upload
         {%- endif -%}

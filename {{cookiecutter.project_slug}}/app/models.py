@@ -10,6 +10,7 @@ class SampleObject(TimestampedModel):
     {%- if cookiecutter.feature_annotations == "on" -%}
     # START_FEATURE direct_upload
     attachments = models.ManyToManyField("Attachment", related_name="sample_objects")
+
     # END_FEATURE direct_upload
     {%- endif -%}
     {%- endif -%}

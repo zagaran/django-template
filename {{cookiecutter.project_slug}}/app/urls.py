@@ -59,6 +59,6 @@ urlpatterns = [
         name='attachment_open'
     ),
     # END_FEATURE direct_upload
-    {%- endif %}
-    {%- endif %}
+    {%- endif -%}
+    {%- endif -%}
 ]
