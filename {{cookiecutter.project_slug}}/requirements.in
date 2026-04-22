@@ -65,6 +65,7 @@ django-storages
 # START_FEATURE docker
 {%- endif %}
 gunicorn
+whitenoise
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE docker
 {%- endif %}

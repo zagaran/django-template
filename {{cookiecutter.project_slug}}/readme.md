@@ -152,3 +152,28 @@ See the [eb-cli](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.
 
 To SSH into an Elastic Beanstalk Environment, use [eb-ssm](https://github.com/zagaran/eb-ssm).
 {%- endif %}
+
+{%- if cookiecutter.ecs == "enabled" %}
+# ECS
+
+## Deploying code
+To deploy new versions of your code to an ECS environment, use the included `deploy.py` script. First fill in the 
+missing constants at the top of that file, and then run the script:
+```
+python deploy.py -env <ENV_NAME>
+```
+This script will do the following:
+1. Build the docker image using your local code version.
+2. Push the docker image to the ECR location for the specified environment
+3. Stop the running worker service
+4. Run database migrations
+5. Deploy to the running web service and restart the worker service
+
+Run `python deploy.py --help` to see available options. You may choose to use an existing ECR image or skip migrations.
+
+## SSH
+To run a bash shell in an ECS environment, use `python deploy.py -env <ENV_NAME> ssh`. 
+{%- if cookiecutter.celery == "enabled" %}
+By default, this will run in the worker environment. Use the `--web` argument to run on the web server instead.
+{%- endif %}
+{%- endif %}

@@ -22,6 +22,17 @@ env = environ.Env(
     # Set to True when running locally for development purposes
     LOCALHOST=(bool, False),
     # Set to True in order to put the site in maintenance mode
+    {%- if cookiecutter.docker == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+
+    # START_FEATURE docker
+    {%- endif %}
+    # Set to True in Docker build environment
+    BUILD=(bool, False),
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # END_FEATURE docker
+    {%- endif %}
+    {%- endif %}
     MAINTENANCE_MODE=(bool, False),
     # Set to True on the production server environment; setting to False makes the
     # site have a "deny all" robots.txt and a non-production warning on all pages
@@ -72,7 +83,7 @@ env = environ.Env(
     {%- endif %}
     {%- endif %}
 )
-# If ALLWED_HOSTS has been configured, then we're running on a server and
+# If ALLOWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
 # file is only used for local development and servers use environment variables)
 if not env("ALLOWED_HOSTS"):
@@ -103,6 +114,18 @@ LOCALHOST = env("LOCALHOST")
 # them from being indexed by search engines and to have a banner warning
 # that this is not the production site
 PRODUCTION = env("PRODUCTION")
+
+
+{%- if cookiecutter.docker == "enabled" %}
+{% if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE docker
+{%- endif %}
+# set BUILD to true to produce a production-ready docker image
+BUILD = env("BUILD")
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE docker
+{%- endif %}
+{%- endif %}
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 if LOCALHOST is True:
@@ -183,6 +206,7 @@ INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "common.middleware.MaintenanceModeMiddleware",
@@ -274,7 +298,7 @@ AUTH_PASSWORD_VALIDATORS = [
 {% if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE django_ses
 {%- endif %}
-if LOCALHOST:
+if LOCALHOST{% if cookiecutter.docker == "enabled" %} or BUILD{% endif %}:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     DEFAULT_FROM_EMAIL = "webmaster@localhost"
 else:
@@ -400,7 +424,7 @@ MESSAGE_TAGS = {
 {% if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE django_storages
 {%- endif %}
-if LOCALHOST is True:
+if LOCALHOST{% if cookiecutter.docker == "enabled" %} or BUILD{% endif %}:
     DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
     MEDIA_ROOT = ""
 else:
@@ -418,6 +442,7 @@ else:
 {%- else %}
 DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
 {%- endif %}
+STATIC_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage"{% if cookiecutter.docker == "enabled" %}if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"{% endif %}
 STORAGES = {
     "default": DEFAULT_STORAGE,
     {%- if cookiecutter.sass_bootstrap == "enabled" %}
@@ -437,7 +462,7 @@ STORAGES = {
     {%- endif %}
     {%- endif %}
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": STATIC_BACKEND,
     },
 }
 
