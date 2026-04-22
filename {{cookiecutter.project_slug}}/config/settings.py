@@ -188,6 +188,15 @@ MIDDLEWARE = [
     "common.middleware.MaintenanceModeMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    {%- if cookiecutter.django_social == "enabled" %}
+    {% if cookiecutter.feature_annotations == "on" %}
+    # START_FEATURE django_social
+    {%- endif %}
+    "social_django.middleware.SocialAuthExceptionMiddleware",
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # END_FEATURE django_social
+    {%- endif %}
+    {%- endif %}
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     {%- if cookiecutter.user_action_tracking == "enabled" %}
@@ -349,6 +358,7 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_URL = "index"
 LOGIN_REDIRECT_URL = "index"
+LOGIN_ERROR_URL = "index"
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env("GOOGLE_OAUTH2_KEY")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env("GOOGLE_OAUTH2_SECRET")
