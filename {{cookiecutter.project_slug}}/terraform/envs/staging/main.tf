@@ -90,7 +90,7 @@ output "web_log_group_name" {
   value = module.ecs_deployment.web_log_group_name
 }
 
-{%- if cookiecutter.celery == "enabled"}
+{%- if cookiecutter.celery == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE celery
 {%- endif %}

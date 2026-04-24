@@ -78,7 +78,7 @@ resource "aws_cloudwatch_log_group" "web_log_group" {
   retention_in_days = 90
 }
 
-{%- if cookiecutter.celery == "enabled"}
+{%- if cookiecutter.celery == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE celery
 {%- endif %}

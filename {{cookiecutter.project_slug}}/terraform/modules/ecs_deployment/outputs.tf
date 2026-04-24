@@ -43,7 +43,7 @@ output "web_log_group_name" {
   value = aws_cloudwatch_log_group.web_log_group.name
 }
 
-{%- if cookiecutter.celery == "enabled"}
+{%- if cookiecutter.celery == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE celery
 {%- endif %}

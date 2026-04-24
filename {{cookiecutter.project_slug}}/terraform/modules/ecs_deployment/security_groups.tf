@@ -58,7 +58,7 @@ resource "aws_security_group" "web" {
   }
 }
 
-{%- if cookiecutter.celery == "enabled"}
+{%- if cookiecutter.celery == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE celery
 {%- endif %}

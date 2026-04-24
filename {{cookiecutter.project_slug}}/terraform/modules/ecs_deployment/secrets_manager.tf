@@ -13,7 +13,7 @@ resource "aws_secretsmanager_secret_version" "web_infrastructure" {
     )
     DEFAULT_FROM_EMAIL = var.ses_from_email
     SECRET_KEY = random_password.app_secret_key.result
-    {%- if cookiecutter.celery == "enabled"}
+    {%- if cookiecutter.celery == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE celery
     {%- endif %}

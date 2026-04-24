@@ -25,7 +25,7 @@ register_type(
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
-app = Celery("sample-django-app")
+app = Celery({{cookiecutter.project_slug}})
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.

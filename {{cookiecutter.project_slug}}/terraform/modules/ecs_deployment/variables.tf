@@ -75,7 +75,7 @@ variable "container_web_count" {
   default = 1
 }
 
-{%- if cookiecutter.celery == "enabled"}
+{%- if cookiecutter.celery == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE celery
 {%- endif %}
