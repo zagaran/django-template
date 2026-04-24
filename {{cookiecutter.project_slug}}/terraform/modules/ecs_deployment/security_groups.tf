@@ -58,6 +58,10 @@ resource "aws_security_group" "web" {
   }
 }
 
+{%- if cookiecutter.celery == "enabled"}
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE celery
+{%- endif %}
 resource "aws_security_group" "worker" {
   name = "${local.app_env_name}-worker"
 
@@ -84,7 +88,7 @@ resource "aws_security_group" "database" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    security_groups =  [aws_security_group.web.id, aws_security_group.worker.id]
+    security_groups = [aws_security_group.web.id{%if cookiecutter.celery == "enabled" %}, aws_security_group.worker.id{% endif %}]
   }
 
   egress {
@@ -128,3 +132,7 @@ resource "aws_security_group" "redis" {
     create_before_destroy = true
   }
 }
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE celery
+{%- endif %}
+{%- endif %}

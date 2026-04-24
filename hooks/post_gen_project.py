@@ -11,6 +11,8 @@ CONDITIONAL_REMOVE_PATHS = [
     "{% if cookiecutter.ecs == 'disabled' %}terraform{% endif %}",
     "{% if cookiecutter.ecs == 'disabled' %}deploy.py{% endif %}",
     "{% if cookiecutter.celery == 'disabled' %}terraform/modules/ecs_deployment/elasticache.tf{% endif %}",
+    "{% if cookiecutter.celery == 'disabled' %}common/tasks.py{% endif %}",
+    "{% if cookiecutter.celery == 'disabled' %}config/celery.py{% endif %}",
     "{% if cookiecutter.docker == 'disabled' %}Dockerfile{% endif %}",
     "{% if cookiecutter.docker == 'disabled' %}.dockerignore{% endif %}",
     "{% if cookiecutter.docker == 'disabled' %}config/.env.build{% endif %}",

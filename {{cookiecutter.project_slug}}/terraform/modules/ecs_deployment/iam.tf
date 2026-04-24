@@ -39,8 +39,15 @@ data "aws_iam_policy_document" "ecs_execution_role_policy" {
     ]
     resources = [
       "${aws_cloudwatch_log_group.web_log_group.arn}:*",
-
+      {%- if cookiecutter.celery == "enabled"}
+      {%- if cookiecutter.feature_annotations == "on" %}
+      # START_FEATURE celery
+      {%- endif %}
       "${aws_cloudwatch_log_group.worker_log_group.arn}:*",
+      {%- if cookiecutter.feature_annotations == "on" %}
+      # END_FEATURE celery
+      {%- endif %}
+      {%- endif %}
     ]
   }
 

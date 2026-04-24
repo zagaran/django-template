@@ -3,13 +3,13 @@ import logging
 import subprocess
 import sys
 import time
+from subprocess import CalledProcessError
 
 import boto3.session
 from pygit2 import Repository
 
 AWS_REGION = "us-east-1"
 AWS_PROFILE_NAME = "FILL_ME_IN"
-aws_session = boto3.session.Session(profile_name=AWS_PROFILE_NAME, region_name=AWS_REGION)
 
 
 MIGRATION_TIMEOUT_SECONDS = 10 * 60  # Ten minutes
@@ -23,6 +23,13 @@ class MigrationFailed(Exception):
 class MigrationTimeOut(Exception):
     pass
 
+
+class SetupFailed(Exception):
+    pass
+
+#######################
+# Deploy steps
+#######################
 
 def deploy(args):
     if not args.no_input:
@@ -46,16 +53,20 @@ def deploy(args):
     terraform_envs = [args.env]
     if args.use_image_from_env:
         terraform_envs.append(args.use_image_from_env)
-    setup(terraform_envs)
+    try:
+        setup(terraform_envs)
+    except SetupFailed:
+        # Setup prints error info
+        raise SystemExit()
 
     # ECR image setup
     if args.use_image_from_env:
         subprocess.run(["terraform", "refresh"], cwd=f"terraform/envs/{args.use_image_from_env}", check=True, capture_output=True)
-        copy_image_from_env(args.use_image_from_env, args.env)
+        copy_image_from_env(args.use_image_from_env, args.env, args.profile)
     elif args.use_latest:
         copy_latest_image(args.env)
     elif not args.skip_build:
-        build_and_push_image(args.env)
+        build_and_push_image(args.env, args.profile, args.use_remote_cache)
     else:
         logging.info("Skipping build step")
 
@@ -79,64 +90,60 @@ def deploy(args):
     restart_services(args.env)
 
 
-def setup(envs):
-    # Refresh terraform state
-    logging.info("Refreshing terraform state...")
-    for env in envs:
-        subprocess.run(["terraform", "refresh"], cwd=f"terraform/envs/{env}", check=True, capture_output=True)
-
-
-def subprocess_output(command_args, **subprocess_kwargs):
-    output = subprocess.run(command_args, **subprocess_kwargs, capture_output=True, check=True)
-    return output.stdout.decode('utf-8').strip("\n").strip('"')
-
-
-def get_terraform_output(output_key, env):
-    return subprocess_output(["terraform", "output", output_key], cwd=f"terraform/envs/{env}")
-
-
-def build_and_push_image(env):
-    # Build and tag image
+def build_and_push_image(env, profile, use_remote_cache):
+    # Authenticate for ECR
     ecr_repository_name = get_terraform_output("ecr_repository_name", env)
     ecr_image_uri = get_terraform_output("ecr_image_uri", env)
-    logging.info("Building docker image...")
-    build_command = ["docker", "build", "-t", ecr_repository_name, "."]
-    subprocess.run(build_command, check=True)
-    subprocess.run(["docker", "tag", f"{ecr_repository_name}:latest", ecr_image_uri], check=True)
+    ecr_login(ecr_image_uri, profile)
 
-    # Push image to ECR
-    logging.info("Logging in to ECR...")
-    password_command = ["aws", "ecr", "get-login-password", "--region", AWS_REGION, "--profile", AWS_PROFILE_NAME]
-    password = subprocess_output(password_command)
-    docker_login_command = ["docker", "login", "--username", "AWS", "--password-stdin", ecr_image_uri.split("/")[0]]
-    subprocess.run(docker_login_command, input=password, text=True, check=True)
-    logging.info("Pushing docker image to ECR...")
-    subprocess.run(["docker", "push", ecr_image_uri], check=True)
+    # Build and push image
+    logging.info("Building docker image and pushing to ECR...")
+    build_command = [
+        "docker", "buildx", "build", "--platform=linux/amd64", "--push", "-t", ecr_image_uri, ".",
+    ]
+    if use_remote_cache:
+        build_command.extend([
+            "--cache-to", "type=inline", "--cache-from", f"type=registry,ref={ecr_image_uri}"
+        ])
+    subprocess.run(build_command, check=True)
 
     # Remove unused docker images to preserve local disk space
     subprocess.run(["docker", "image", "prune", "-f"])
 
 
-def copy_image_from_env(from_env, to_env):
+def copy_image_from_env(from_env, to_env, profile):
     # Retags image from from_env into to_env.
     logging.info(f"Copying image from {from_env} to {to_env}")
     from_ecr_repository_name = get_terraform_output("ecr_repository_name", from_env)
     to_ecr_repository_name = get_terraform_output("ecr_repository_name", to_env)
-    retag_image(from_ecr_repository_name, from_env, to_ecr_repository_name, to_env)
+
+    if from_ecr_repository_name == to_ecr_repository_name:
+        retag_image(from_ecr_repository_name, from_env, to_env)
+    else:
+        # Pull image
+        from_image_uri = get_terraform_output("ecr_image_uri", from_env)
+        subprocess.run(["docker", "pull", from_image_uri], check=True)
+
+        # Push image
+        to_image_uri = get_terraform_output("ecr_image_uri", to_env)
+        subprocess.run(["docker", "tag", from_image_uri, to_image_uri], check=True)
+        subprocess.run(["docker", "push", to_image_uri], check=True)
+        # Remove unused docker images to preserve local disk space
+        subprocess.run(["docker", "image", "prune", "-f"])
 
 
 def copy_latest_image(env):
     # Retags latest image in repository for use by env
     logging.info(f"Copying latest image to {env}")
     ecr_repository_name = get_terraform_output("ecr_repository_name", env)
-    retag_image(ecr_repository_name, "latest", ecr_repository_name, env)
+    retag_image(ecr_repository_name, "latest", env)
 
 
-def retag_image(from_repository, from_tag, to_repository, to_tag):
-    ecr_client = aws_session.client("ecr")
+def retag_image(repository, from_tag, to_tag):
+    ecr_client = boto3.client("ecr")
     # Get image manifest
     image_response = ecr_client.batch_get_image(
-        repositoryName=from_repository,
+        repositoryName=repository,
         imageIds=[{
             "imageTag": from_tag
         }],
@@ -146,7 +153,7 @@ def retag_image(from_repository, from_tag, to_repository, to_tag):
     image_manifest_media_type = image_response["images"][0]["imageManifestMediaType"]
     # Add new tag to manifest
     ecr_client.put_image(
-        repositoryName=to_repository,
+        repositoryName=repository,
         imageManifest=image_manifest,
         imageTag=to_tag,
         imageManifestMediaType=image_manifest_media_type,
@@ -156,7 +163,7 @@ def retag_image(from_repository, from_tag, to_repository, to_tag):
 def run_migrations(env):
     # Runs a migration task using the web server task definition with an overridden command
     cluster_id = get_terraform_output("cluster_id", env)
-    ecs_client = aws_session.client("ecs")
+    ecs_client = boto3.client("ecs")
     logging.info("Starting migrations...")
     run_task_response = ecs_client.run_task(
         taskDefinition=get_terraform_output("web_task_definition_arn", env),
@@ -219,7 +226,7 @@ def stop_worker_service(env):
     logging.info("Stopping worker service")
     cluster_id = get_terraform_output("cluster_id", env)
     service_name = get_terraform_output("worker_service_name", env)
-    ecs_client = aws_session.client("ecs")
+    ecs_client = boto3.client("ecs")
     ecs_client.update_service(
         cluster=cluster_id,
         service=service_name,
@@ -261,13 +268,15 @@ def restart_services(env):
     logging.info("Redeploying web service...")
     web_service_name = get_terraform_output("web_service_name", env)
     cluster_id = get_terraform_output("cluster_id", env)
-    ecs_client = aws_session.client("ecs")
+    ecs_client = boto3.client("ecs")
     ecs_client.update_service(
         cluster=cluster_id,
         service=web_service_name,
         forceNewDeployment=True,
     )
     service_names_to_check = [web_service_name]
+    failed_task_ids = {}
+    worker_service_name = None
     {%- if cookiecutter.celery == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
     #START_FEATURE celery
@@ -294,29 +303,34 @@ def restart_services(env):
             cluster=cluster_id, services=service_names_to_check
         )
         in_progress_service_names = []
+
         for service in services_response["services"]:
             new_deployment = next(
                 deployment for deployment in service["deployments"] if deployment["status"] == "PRIMARY"
             )
             deployment_state = new_deployment["rolloutState"]
             service_name = service['serviceName']
+            is_worker = service_name == worker_service_name
+            if new_deployment["failedTasks"] > 0 and not failed_task_ids.get(service_name):
+                failed_task_ids[service_name] = new_deployment['id']
+                logging.warning(f"Deployment task for {service_name} failed. Retrying...")
             if deployment_state == "IN_PROGRESS":
                 in_progress_service_names.append(service_name)
             elif deployment_state == "COMPLETED":
-                logging.info(f"Success! Deployment complete for service {service_name}.")
+                failed_id = failed_task_ids.get(service_name)
+                if failed_id and failed_id != new_deployment['id']:
+                    # original deployment did not succeed; rollback was successful
+                    logging.error(
+                        f"Deployment failed for {service_name}! Rolled back to last successful deployment. "
+                        f"Check log stream for more info: {cloudwatch_log_url(env, worker=is_worker)}"
+                    )
+                    raise Exception("Deployment rolled back")
+                else:
+                    logging.info(f"Success! Deployment complete for service {service_name}.")
             elif deployment_state == "FAILED":
-                {%- if cookiecutter.celery == "enabled" %}
-                {%- if cookiecutter.feature_annotations == "on" %}
-                # START_FEATURE celery
-                {%- endif %}
-                is_worker = service_name == worker_service_name
-                {%- if cookiecutter.feature_annotations == "on" %}
-                # END_FEATURE celery
-                {%- endif %}
-                {%- endif %}
                 logging.error(
                     f"Deployment failed for {service_name}! Reason: {new_deployment['rolloutStateReason']}. "
-                    f"Check log stream for more info: {cloudwatch_log_url(env, worker={% if cookiecutter.celery == "enabled" %}is_worker{% else %}False{% endif %})}"
+                    f"Check log stream for more info: {cloudwatch_log_url(env, worker=is_worker)}"
                 )
             else:
                 logging.warning(f"Unknown deployment state {deployment_state}. Please check the ECS console.")
@@ -328,16 +342,17 @@ def restart_services(env):
     raise Exception("Too many retries. Please check the ECS console.")
 
 
-def cloudwatch_log_url(env, worker=False):
-    log_name_key = "worker_log_group_name" if worker else "web_log_group_name"
-    cloudwatch_log_group_name = get_terraform_output(log_name_key, env)
-    return f"https://{AWS_REGION}.console.aws.amazon.com/cloudwatch/home?region={AWS_REGION}#logsV2:log-groups/log-group/{cloudwatch_log_group_name}"
-
+#######################
+# SSH
+#######################
 
 def ssh(args):
     # Runs a bash shell in a running task for the env. Note this may run in a short-lived task (e.g. migration task)
     # Refresh terraform state
-    setup([args.env])
+    try:
+        setup([args.env])
+    except SetupFailed:
+        return
     cluster_id = get_terraform_output("cluster_id", args.env)
     {%- if cookiecutter.celery == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
@@ -351,20 +366,72 @@ def ssh(args):
     service_name_key = "web_service_name"
     {%- endif %}
     service_name = get_terraform_output(service_name_key, args.env)
-    ecs_client = aws_session.client("ecs")
+    ecs_client = boto3.client("ecs")
     list_tasks_resp = ecs_client.list_tasks(cluster=cluster_id, serviceName=service_name)
     task_ids = list_tasks_resp["taskArns"]
 
     if task_ids:
         task_id = task_ids[0]
         bash_command = ["aws", "ecs", "execute-command", "--cluster", cluster_id, "--task", task_id,
-                        "--region", AWS_REGION, "--profile", AWS_PROFILE_NAME, "--interactive",
+                        "--region", AWS_REGION, "--profile", args.profile, "--interactive",
                         "--command", "'/bin/bash'"]
         subprocess.run(bash_command)
 
 
+##########################
+# Helpers
+##########################
+
+def setup(envs):
+    # Refresh terraform state
+    logging.info("Refreshing terraform state...")
+    for env in envs:
+        try:
+            subprocess.run(["terraform", "refresh"], cwd=f"terraform/envs/{env}", check=True, capture_output=True)
+        except CalledProcessError as e:
+            print(e.stderr.decode())
+            logging.error(
+                f"Terraform refresh failed -- see output above. \n"
+                f"* Have you run terraform init in the terraform/envs/{env} directory? \n"
+                f"* Are you authenticated with AWS?\n"
+            )
+            raise SetupFailed()
+
+
+def subprocess_output(command_args, **subprocess_kwargs):
+    try:
+        output = subprocess.run(command_args, **subprocess_kwargs, capture_output=True, check=True)
+        output = output.stdout.decode('utf-8').strip("\n").strip('"')
+        # If the output contains newlines after stripping, we may be running a github action
+        if "\n" in output:
+            output = output.split("\n")[1].strip('"')
+        return output
+    except CalledProcessError as e:
+        logging.error(e.stderr.decode())
+        raise
+
+
+def get_terraform_output(output_key, env):
+    return subprocess_output(["terraform", "output", output_key], cwd=f"terraform/envs/{env}")
+
+
+def ecr_login(ecr_image_uri, profile):
+    logging.info("Logging in to ECR...")
+    password_command = ["aws", "ecr", "get-login-password", "--region", AWS_REGION, "--profile", profile]
+    password = subprocess_output(password_command)
+    docker_login_command = ["docker", "login", "--username", "AWS", "--password-stdin", ecr_image_uri.split("/")[0]]
+    subprocess.run(docker_login_command, input=password, text=True, check=True)
+
+def cloudwatch_log_url(env, worker=False):
+    log_name_key = "worker_log_group_name" if worker else "web_log_group_name"
+    cloudwatch_log_group_name = get_terraform_output(log_name_key, env)
+    return f"https://{AWS_REGION}.console.aws.amazon.com/cloudwatch/home?region={AWS_REGION}#logsV2:log-groups/log-group/{cloudwatch_log_group_name}"
+
+
+
 def main():
     parser = argparse.ArgumentParser(prog="python deploy.py")
+    parser.add_argument("env", help="Terraform environment to deploy")
     parser.add_argument("--no-input", action="store_true",
                         help="Skips request for confirmation before starting the deploy.")
     parser.add_argument("--skip-build", action="store_true",
@@ -374,10 +441,12 @@ def main():
     parser.add_argument("--use-image-from-env",
                         help="If provided, skips the terraform build and instead uses the existing built image from the specified environment")
     parser.add_argument("--skip-migration", action="store_true", help="Skips the migration step.")
-    parser.add_argument("-env", help="Terraform environment to deploy", required=True)
+    parser.add_argument("--profile", help="Set the AWS profile name for the environment", default=AWS_PROFILE_NAME)
+    parser.add_argument("--use-remote-cache", action="store_true",
+                        help="During build step, uses the registry cache instead of the local cache")
     parser.set_defaults(func=deploy)
 
-    subparsers = parser.add_subparsers(title="Extra utilities", prog="python deploy.py -env <ENV_NAME>")
+    subparsers = parser.add_subparsers(title="Extra utilities", prog="python deploy.py <ENV_NAME>")
     ssh_parser = subparsers.add_parser("ssh",
                                        help="SSH into running container in env instead of deploying")
     {%- if cookiecutter.celery == "enabled" %}
@@ -394,6 +463,7 @@ def main():
 
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(levelname)s - %(message)s")
+    boto3.setup_default_session(profile_name=args.profile, region_name=AWS_REGION)
     args.func(args)
 
 

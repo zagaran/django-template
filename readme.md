@@ -174,7 +174,8 @@ eb-ssm [ENVIRONMENT_NAME]
 An alternative deployment strategy is to use ECS (Elastic Container Service). This feature provides ECS deployment 
 support using terraform to provision AWS resources. It is not valid to enable both elastic beanstalk and ECS, or to 
 enable ECS without enabling docker. See the project readme for deployment details. The deployment will include both a 
-web and worker server if celery is enabled, and a web server only if disabled.
+web and worker server if celery is enabled, and a web server only if disabled. The ecs configuration without celery 
+enabled has not been extensively tested, so tweaks may be needed.
 
 ## Celery (`celery`)
 

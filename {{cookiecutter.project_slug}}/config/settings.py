@@ -571,3 +571,18 @@ COMPRESS_ROOT = STORAGES["sass_processor"]["ROOT"]
 # END_FEATURE sass_bootstrap
 {%- endif %}
 {%- endif %}
+
+{%- if cookiecutter.celery == "enabled" %}
+{% if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE celery
+{%- endif %}
+# Celery configuration
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="")
+# If no broker URL configured, run tasks in the web process
+CELERY_TASK_ALWAYS_EAGER = not CELERY_BROKER_URL
+CELERY_TASK_EAGER_PROPAGATES = True
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE celery
+{%- endif %}
+{%- endif %}

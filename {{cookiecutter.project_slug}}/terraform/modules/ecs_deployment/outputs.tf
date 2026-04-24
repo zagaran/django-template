@@ -43,6 +43,10 @@ output "web_log_group_name" {
   value = aws_cloudwatch_log_group.web_log_group.name
 }
 
+{%- if cookiecutter.celery == "enabled"}
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE celery
+{%- endif %}
 output "worker_service_name" {
   description = "The name of the ECS worker service. This is also the container name."
   value = aws_ecs_service.worker.name
@@ -57,3 +61,7 @@ output "worker_log_group_name" {
   description = "The name of the cloudwatch log group for the worker service task"
   value = aws_cloudwatch_log_group.worker_log_group.name
 }
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE celery
+{%- endif %}
+{%- endif %}

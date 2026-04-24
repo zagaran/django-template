@@ -73,6 +73,19 @@ whitenoise
 {%- if cookiecutter.sentry == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 
+
+{%- if cookiecutter.celery == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE celery
+{%- endif %}
+celery[redis]
+celery-redbeat
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE celery
+{%- endif %}
+{%- endif %}
+
 {%- endif %}
 {%- endif %}
 {%- if cookiecutter.django_ses == "enabled" %}
@@ -99,7 +112,6 @@ libsass
 {%- endif %}
 {%- endif %}
 {%- if cookiecutter.feature_annotations == "on" %}
-
 ################################
 {%- endif %}
 

@@ -75,6 +75,10 @@ variable "container_web_count" {
   default = 1
 }
 
+{%- if cookiecutter.celery == "enabled"}
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE celery
+{%- endif %}
 variable "container_worker_cpu" {
   type = number
   default = 256
@@ -86,16 +90,19 @@ variable "container_worker_memory" {
 }
 
 variable "container_worker_count" {
-  type = number
-  default = 1
-}
-
-variable "ssl_policy" {
-  type = string
-  default = "ELBSecurityPolicy-TLS13-1-2-Res-FIPS-2023-04"
+type = number
+default = 1
 }
 
 variable "redis_instance_type" {
   type = string
   default = "cache.t3.micro"
+}
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE celery
+{%- endif %}
+{%- endif %}
+variable "ssl_policy" {
+  type = string
+  default = "ELBSecurityPolicy-TLS13-1-2-Res-FIPS-2023-04"
 }
