@@ -6,6 +6,7 @@
   "reference_examples":     ["on", "off"],
 
   "bootstrap_messages":     ["enabled", "disabled"],
+  "celery":                 ["enabled", "disabled"],
   "crispy_forms":           ["enabled", "disabled"],
   "debug_toolbar":          ["enabled", "disabled"],
   "django_react":           ["enabled", "disabled"],
@@ -13,6 +14,7 @@
   "django_social":          ["enabled", "disabled"],
   "django_storages":        ["enabled", "disabled"],
   "docker":                 ["enabled", "disabled"],
+  "ecs":                    ["enabled", "disabled"],
   "elastic_beanstalk":      ["enabled", "disabled"],
   "pre_commit":             ["enabled", "disabled"],
   "sass_bootstrap":         ["enabled", "disabled"],

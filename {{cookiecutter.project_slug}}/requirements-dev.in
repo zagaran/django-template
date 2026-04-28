@@ -36,3 +36,15 @@ django-debug-toolbar
 # END_FEATURE debug_toolbar
 {%- endif %}
 {%- endif %}
+
+{%- if cookiecutter.ecs == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE ecs
+{%- endif %}
+# For deploy script
+pygit2
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE ecs
+{%- endif %}
+{%- endif %}

@@ -92,3 +92,16 @@ class UserAction(TimestampedModel):
 # END_FEATURE user_action_tracking
 {%- endif %}
 {%- endif %}
+{%- if cookiecutter.celery == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+
+# START_FEATURE celery
+{%- endif %}
+class TaskMonitor(TimestampedModel):
+    """Model to track whether the task framework is successfully running tasks"""
+    last_run = models.DateTimeField(auto_now_add=True)
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE celery
+{%- endif %}
+{%- endif %}
