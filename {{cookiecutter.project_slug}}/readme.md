@@ -157,32 +157,36 @@ To SSH into an Elastic Beanstalk Environment, use [eb-ssm](https://github.com/za
 
 {%- if cookiecutter.ecs == "enabled" %}
 ## ECS
-### Creating a new ECS environment
-The terraform configuration for ECS deployments will create both a web and worker environment, 
-with a Redis instance to act as a task broker.
+Deployment to ECS requires Docker and Terraform. The configuration includes E2E encryption. 
 
-1. Create an ECR repository
-2. Build and push an initial docker file to it (ECR provides docker commands for this).
+### Creating a new ECS environment
+The terraform configuration for ECS deployments will create both a web and worker service, 
+with a Redis instance to act as a task broker. To create a new environment, add a new directory to `terraform/envs` 
+with a `main.tf` that references the `ecs_deployment` module. Steps 1 - 4 may be shared between environments as 
+appropriate. 
+
+1. Create an ECR repository. Add an appropriate lifecycle policy to remove untagged images (e.g. 90 days).
 3. Create a bucket for holding terraform config
 4. Create an SES identity and from email (if using SES)
 5. Create an AWS certificate manager certificate for your domain
 6. Create a secrets manager secret containing the config parameters needed by the application (you do not need to include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", "DEFAULT_FROM_EMAIL", or "CELERY_BROKER_URL" as those are managed by terraform in `terraform/modules/ecs_deployment/secrets_manager.tf`)
 7. Fill in the missing values in `terraform/envs/<ENV_NAME>/main.tf`
 8. Run terraform to set up that environment
-```
-cd terraform/envs/<ENV_NAME>
-terraform init
-terraform plan
-terraform apply
-```
-
-9. Redeploy your code using the steps described below (with the --use-latest option) to run initial migrations
+   ```
+   cd terraform/envs/<ENV_NAME>
+   terraform init
+   terraform plan
+   terraform apply
+   ```
+   The initial service deployments will fail because they reference ECR images that don't exist, but this will be resolved by step (8)
+9. Deploy your code using the steps described below. This will push the initial application image, start the server task(s), and run migrations.
 10. Add a DNS entry from your domain name to the created load balancer
 
 ### Deploying code
 To deploy new versions of your code to an ECS environment, use the included `deploy.py` script. 
 You must have docker installed and running in order to run build steps in the script.
 First fill in the missing constants at the top of that file, and then run the script:
+
 ```
 python deploy.py <ENV_NAME>
 ```
@@ -197,9 +201,20 @@ This script will do the following:
 
 Run `python deploy.py --help` to see available options. You may choose to use an existing ECR image or skip migrations.
 
+#### Note on E2E Encryption
+The server self-signed SSL certificate is generated as part of Docker image creation. It is valid for 10 years and will 
+be regenerated every time python packages are updated, or if the Docker cache is cleared for any reason.
+
 ### SSH
 To run a bash shell in an ECS environment, use `python deploy.py <ENV_NAME> ssh`. 
 {%- if cookiecutter.celery == "enabled" %}
 By default, this will run in the worker environment. Use the `--web` argument to run on the web server instead.
 {%- endif %}
+{%- endif %}
+{%- if cookiecutter.celery == "enabled" %}
+
+### Worker tasks & status monitoring
+Scheduled worker tasks should be registered in `tasks/task_schedule.py`.
+
+Worker server health status can be monitored at `/task-status/` for automated downtime detection. 
 {%- endif %}

@@ -10,17 +10,21 @@ resource "aws_lb" "alb" {
 resource "aws_lb_target_group" "target_group" {
   name        = var.environment_name
   port        = 8080
-  protocol    = "HTTP"
+  protocol    = "HTTPS"
   vpc_id      = data.aws_vpc.vpc.id
   target_type = "ip"
   health_check {
     path = "/health-check/"
+    protocol = "HTTPS"
   }
   lifecycle {
-    create_before_destroy = true
+    create_before_destroy = false
+  }
+  stickiness {
+    type = "lb_cookie"
+    cookie_duration = 300
   }
 }
-
 
 resource "aws_lb_listener" "http_redirect" {
   load_balancer_arn = aws_lb.alb.arn

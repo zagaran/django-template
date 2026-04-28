@@ -40,6 +40,12 @@ ADD requirements.txt /app/requirements.txt
 RUN set -ex \
     && pip install --no-cache-dir -r /app/requirements.txt
 
+# Generate self-signed SSL cert for E2E encryption
+# Note: after pip install so that it will regenerate at same frequency
+RUN mkdir -p /etc/pki/tls/certs
+RUN openssl req -x509 -newkey rsa:4096 -keyout /etc/pki/tls/certs/server.key -out /etc/pki/tls/certs/server.crt -days 3650 -nodes -subj "/CN=*.mbta.com"
+RUN chmod -R a+rX /etc/pki
+
 # Cleanup installs
 RUN set -ex \
     && apt purge -y --auto-remove $buildDeps \
@@ -93,5 +99,5 @@ RUN set -ex \
 
 EXPOSE 8080
 
-CMD ["gunicorn", "--bind", ":8080", "--workers", "3", "config.wsgi:application", "--access-logfile", "-", "--error-logfile", "-"]
+CMD ["gunicorn", "--bind", ":8080", "--certfile=/etc/pki/tls/certs/server.crt", "--keyfile=/etc/pki/tls/certs/server.key", "--workers", "2", "--threads", "5", "config.wsgi:application", "--access-logfile", "-", "--error-logfile", "-"]
 {% if cookiecutter.feature_annotations == "on" %}# END_FEATURE docker{%- endif %}

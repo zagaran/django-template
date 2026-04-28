@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db.models import TextChoices
 
 from config.celery import app
+from tasks.system_monitoring import update_task_monitor
 
 class TaskFrequency(TextChoices):
     five_minutes = "five_minutes"
@@ -36,7 +37,7 @@ def sample_task():
 
 SCHEDULED_TASKS = {
     TaskFrequency.five_minutes: {
-        "sample_task": sample_task,
+        "update_task_monitor": update_task_monitor,
     },
     TaskFrequency.daily: {},
 }

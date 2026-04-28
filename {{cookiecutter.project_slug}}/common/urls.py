@@ -5,6 +5,15 @@ from common import views
 
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
+    {%- if cookiecutter.celery == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # START_FEATURE celery
+    {%- endif %}
+    path("task-status/", views.TaskMonitorView.as_view(), name='task_status'),
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # END_FEATURE celery
+    {%- endif %}
+    {%- endif %}
     {%- if cookiecutter.reference_examples == "on" %}
     {%- if cookiecutter.django_react == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
