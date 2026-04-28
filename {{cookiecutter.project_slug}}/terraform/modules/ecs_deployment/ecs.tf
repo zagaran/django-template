@@ -128,7 +128,7 @@ resource "aws_ecs_service" "worker" {
   network_configuration {
     subnets          = data.aws_subnets.subnets.ids
     security_groups  = [aws_security_group.worker.id]
-    assign_public_ip = false
+    assign_public_ip = true
   }
 }
 

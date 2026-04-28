@@ -1,5 +1,5 @@
 {% if cookiecutter.feature_annotations == "on" -%}# START_FEATURE docker{%- endif %}
-FROM python:3.11.4-slim-buster
+FROM python:3.11-bookworm
 
 # reduces file creation
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -33,7 +33,7 @@ RUN set -ex \
       procps \
       postgresql-client \
     " \
-    && apt-get update && apt-get install -y $buildDeps $deps --no-install-recommends \
+    && apt-get update && apt-get install -y $buildDeps $deps --no-install-recommends
 
 # Install python dependencies
 ADD requirements.txt /app/requirements.txt

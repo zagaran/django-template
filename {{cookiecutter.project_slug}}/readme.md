@@ -166,7 +166,6 @@ with a Redis instance to act as a task broker.
 3. Create a bucket for holding terraform config
 4. Create an SES identity and from email (if using SES)
 5. Create an AWS certificate manager certificate for your domain
-6. Create a secrets manager secret containing the config parameters needed by the application (you do not need to include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", or "DEFAULT_FROM_EMAIL" as those are managed by terraform in `terraform/modules/ecs_deployment/secrets_manager.tf`)
 6. Create a secrets manager secret containing the config parameters needed by the application (you do not need to include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", "DEFAULT_FROM_EMAIL", or "CELERY_BROKER_URL" as those are managed by terraform in `terraform/modules/ecs_deployment/secrets_manager.tf`)
 7. Fill in the missing values in `terraform/envs/<ENV_NAME>/main.tf`
 8. Run terraform to set up that environment
@@ -181,8 +180,9 @@ terraform apply
 10. Add a DNS entry from your domain name to the created load balancer
 
 ### Deploying code
-To deploy new versions of your code to an ECS environment, use the included `deploy.py` script. First fill in the 
-missing constants at the top of that file, and then run the script:
+To deploy new versions of your code to an ECS environment, use the included `deploy.py` script. 
+You must have docker installed and running in order to run build steps in the script.
+First fill in the missing constants at the top of that file, and then run the script:
 ```
 python deploy.py <ENV_NAME>
 ```
