@@ -1,5 +1,5 @@
 resource "aws_lb" "alb" {
-  name               = var.environment_name
+  name               = "${local.app_env_name}-lb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.load_balancer.id]
@@ -8,7 +8,7 @@ resource "aws_lb" "alb" {
 
 
 resource "aws_lb_target_group" "target_group" {
-  name        = var.environment_name
+  name        = local.app_env_name
   port        = 8080
   protocol    = "HTTPS"
   vpc_id      = data.aws_vpc.vpc.id

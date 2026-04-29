@@ -95,13 +95,14 @@ class TaskMonitorView(View):
     def get(self, request, *args, **kwargs):
         task_monitor, _ = TaskMonitor.objects.get_or_create()
         # Status 500 if last task run was > 15 min ago
-        if task_monitor.last_run < timezone.now() - timedelta(minutes=15):
-            return HttpResponse(f"Last run: {timezone.localtime(task_monitor.last_run).isoformat()}", status=500)
-        return HttpResponse(status=200)
+        message = f"Last run: {timezone.localtime(task_monitor.last_run).isoformat()}"
+        worker_down = task_monitor.last_run < timezone.now() - timedelta(minutes=15)
+        return HttpResponse(message, status=500 if worker_down else 200)
 
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE celery
 {%- endif %}
+
 {%- endif %}
 
 def error_404(request, exception):

@@ -13,7 +13,8 @@ AWS_PROFILE_NAME = "FILL_ME_IN"
 
 
 MIGRATION_TIMEOUT_SECONDS = 10 * 60  # Ten minutes
-STATUS_CHECK_INTERVAL = 30
+STATUS_CHECK_INTERVAL = 5
+STATUS_REPORT_FREQUENCY = 6 # Report every 6 checks
 
 
 class MigrationFailed(Exception):
@@ -188,9 +189,12 @@ def run_migrations(env):
     migration_task_id = run_task_response["tasks"][0]["taskArn"]
     logging.info(f"Migration task provisioned with ID {migration_task_id}")
     start = time.time()
+    wait_index = 0
 
     while time.time() - start < MIGRATION_TIMEOUT_SECONDS:
-        logging.info("Waiting for migrations to finish...")
+        if wait_index % STATUS_REPORT_FREQUENCY == 0:
+            logging.info("Waiting for migrations to finish...")
+        wait_index += 1
         describe_tasks_response = ecs_client.describe_tasks(cluster=cluster_id, tasks=[migration_task_id])
         task = describe_tasks_response["tasks"][0]
         stop_code = task.get("stopCode")
@@ -216,9 +220,9 @@ def run_migrations(env):
         f"Migration timed out. It may still be running. Check log stream for more info: {cloudwatch_log_url(env)}"
     )
     raise MigrationTimeOut()
-
-
 {%- if cookiecutter.celery == "enabled" %}
+
+
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE celery
 {%- endif %}
@@ -241,11 +245,14 @@ def stop_worker_service(env):
     if not task_arns:
         logging.info("No worker tasks to stop")
         return
+    wait_index = 0
     while True:
         tasks = ecs_client.describe_tasks(cluster=cluster_id, tasks=task_arns)["tasks"]
         if all(task.get("stoppedAt") for task in tasks):
             break
-        logging.info("Waiting for worker service to stop...")
+        if wait_index % STATUS_REPORT_FREQUENCY == 0:
+            logging.info("Waiting for worker service to stop...")
+        wait_index += 1
         time.sleep(STATUS_CHECK_INTERVAL)
     logging.info("Worker service stopped")
 {%- if cookiecutter.feature_annotations == "on" %}
@@ -297,8 +304,9 @@ def restart_services(env):
     {%- endif %}
     {%- endif %}
     # Wait up to 30 min for deployment to complete
-    for _ in range(30 * int(60 / STATUS_CHECK_INTERVAL)):
-        logging.info("Waiting for deployment to finish...")
+    for i in range(30 * int(60 / STATUS_CHECK_INTERVAL)):
+        if i % STATUS_REPORT_FREQUENCY == 0:
+            logging.info("Waiting for deployment to finish...")
         services_response = ecs_client.describe_services(
             cluster=cluster_id, services=service_names_to_check
         )

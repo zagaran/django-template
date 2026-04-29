@@ -162,8 +162,10 @@ Deployment to ECS requires Docker and Terraform. The configuration includes E2E 
 ### Creating a new ECS environment
 The terraform configuration for ECS deployments will create both a web and worker service, 
 with a Redis instance to act as a task broker. To create a new environment, add a new directory to `terraform/envs` 
-with a `main.tf` that references the `ecs_deployment` module. Steps 1 - 4 may be shared between environments as 
-appropriate. 
+with a `main.tf` that references the `ecs_deployment` module. The deployment script assumes that the `environment_name`
+parameter matches the directory name.
+
+Steps 1 - 4 may be shared between environments as appropriate. 
 
 1. Create an ECR repository. Add an appropriate lifecycle policy to remove untagged images (e.g. 90 days).
 3. Create a bucket for holding terraform config
