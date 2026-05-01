@@ -3,20 +3,20 @@ terraform {
     bucket = ""  # TODO: FILL ME IN
     key = "staging.tfstate"
     region = "us-east-1"  # TODO: FILL ME IN
-    profile = ""  # TODO: FILL ME IN
+    profile = "{{ cookiecutter.project_slug|replace('_', '-') }}"  # TODO: FILL ME IN
   }
 
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      version = "~>5.59"
+      version = "~>5.100"
     }
   }
 }
 
 provider "aws" {
   region = "us-east-1"  # TODO: FILL ME IN
-  profile = ""  # TODO: FILL ME IN
+  profile = "{{ cookiecutter.project_slug|replace('_', '-') }}"  # TODO: FILL ME IN
 }
 
 module "ecs_deployment" {
