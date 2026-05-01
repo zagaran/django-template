@@ -29,12 +29,6 @@ def schedule_tasks(sender, **kwargs):
             sender.add_periodic_task(schedule, task.s(), name=task_name)
 
 
-# TODO: Delete me
-@app.task
-def sample_task():
-    logging.info("Sample task running")
-
-
 SCHEDULED_TASKS = {
     TaskFrequency.five_minutes: {
         "update_task_monitor": update_task_monitor,

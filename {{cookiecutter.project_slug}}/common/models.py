@@ -93,9 +93,9 @@ class UserAction(TimestampedModel):
 {%- endif %}
 {%- endif %}
 {%- if cookiecutter.celery == "enabled" %}
+
+
 {%- if cookiecutter.feature_annotations == "on" %}
-
-
 # START_FEATURE celery
 {%- endif %}
 class TaskMonitor(TimestampedModel):

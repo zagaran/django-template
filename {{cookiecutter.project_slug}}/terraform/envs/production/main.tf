@@ -21,18 +21,18 @@ provider "aws" {
 
 module "ecs_deployment" {
     source = "../../modules/ecs_deployment"
-    
+
     # Required Variables
-    environment_name = "production"
-    application_name = ""  # TODO: FILL ME IN
-    vpc_id = ""  # TODO: FILL ME IN
-    web_config_secret_name = ""  # TODO: FILL ME IN
-    s3_bucket_prefix = ""  # TODO: FILL ME IN
-    rds_engine_version = ""  # TODO: FILL ME IN (e.g. "18")
-    ses_identity = ""  # TODO: FILL ME IN
-    ses_from_email = ""  # TODO: FILL ME IN
-    certificate_manager_arn =  ""  # TODO: FILL ME IN
-    ecr_repository_name =  ""  # TODO: FILL ME IN
+    environment_name = "production"  # Should match directory name
+    application_name = ""  # TODO: Base application slug for resource naming
+    vpc_id = ""  # TODO: VPCs -> VPC ID
+    web_config_secret_name = ""  # TODO: Secrets Manager -> Store a new secret -> Secret name
+    s3_bucket_prefix = ""  # TODO: Base slug for S3 bucket names (unique among applications, shared among environments)
+    rds_engine_version = ""  # TODO: Desired Postgres major version, e.g. "18"
+    ses_identity = ""  # TODO: SES -> Identities -> Create identity
+    ses_from_email = ""  # TODO: Desired sending email within the provided SES identity
+    certificate_manager_arn =  ""  # TODO: Certificate manager -> Request -> ARN
+    ecr_repository_name =  ""  # TODO: ECR -> Create repository -> Repository name
 
     # Optional Variables
     rds_backup_retention_period = 30

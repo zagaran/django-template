@@ -206,7 +206,15 @@ INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    {%- if cookiecutter.docker == "enabled" %}
+    {% if cookiecutter.feature_annotations == "on" %}
+    # START_FEATURE docker
+    {%- endif %}
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # END_FEATURE docker
+    {%- endif %}
+    {%- endif %}
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "common.middleware.MaintenanceModeMiddleware",
