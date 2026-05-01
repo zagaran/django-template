@@ -62,7 +62,6 @@ def deploy(args):
 
     # ECR image setup
     if args.use_image_from_env:
-        subprocess.run(["terraform", "refresh"], cwd=f"terraform/envs/{args.use_image_from_env}", check=True, capture_output=True)
         copy_image_from_env(args.use_image_from_env, args.env, args.profile)
     elif args.use_latest:
         copy_latest_image(args.env)

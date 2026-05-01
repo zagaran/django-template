@@ -199,6 +199,15 @@ if DEBUG_TOOLBAR:
 
 LOCAL_APPS = [
     "common",
+    {%- if cookiecutter.celery == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # START_FEATURE celery
+    {%- endif %}
+    "tasks",
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # END_FEATURE celery
+    {%- endif %}
+    {%- endif %}
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS

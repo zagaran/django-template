@@ -216,7 +216,8 @@ By default, this will run in the worker environment. Use the `--web` argument to
 {%- if cookiecutter.celery == "enabled" %}
 
 ### Worker tasks & status monitoring
-Scheduled worker tasks should be registered in `tasks/task_schedule.py`.
+Scheduled worker tasks should be registered in `tasks/tasks.py`. Other async tasks can be registered in a `tasks.py` 
+file in any application.
 
 Worker server health status can be monitored at `/task-status/` for automated downtime detection. 
 {%- endif %}

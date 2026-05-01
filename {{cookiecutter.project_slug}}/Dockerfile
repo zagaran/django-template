@@ -1,5 +1,4 @@
-{% if cookiecutter.feature_annotations == "on" -%}# START_FEATURE docker{%- endif %}
-FROM python:3.11-bookworm
+FROM python:3.11-slim-trixie
 
 # reduces file creation
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -35,6 +34,29 @@ RUN set -ex \
     " \
     && apt-get update && apt-get install -y $buildDeps $deps --no-install-recommends
 
+# Create Django user to avoid running as root
+ARG UID=1000
+ARG GID=1000
+ARG CREATE_GROUP=True
+
+RUN if [ "$CREATE_GROUP" = "True" ]; then groupadd -g ${GID} django; fi
+RUN useradd -m django -u ${UID} -g ${GID}
+RUN chown -R ${UID}:${GID} /app
+
+
+# Add bash config for ssh
+RUN echo 'alias db="python manage.py shell_plus"' >> "/root/.bashrc"
+RUN echo 'alias db="python manage.py shell_plus"' >> "/home/django/.bashrc"
+
+RUN echo '\
+"\e[A":history-search-backward \n\
+"\e[B":history-search-forward' \
+>> "/root/.inputrc"
+RUN echo '\
+"\\e[A":history-search-backward \n\
+"\\e[B":history-search-forward' \
+>> "/home/django/.inputrc"
+
 # Install python dependencies
 ADD requirements.txt /app/requirements.txt
 RUN set -ex \
@@ -52,8 +74,8 @@ RUN set -ex \
        $(! command -v gpg > /dev/null || echo 'gnupg dirmngr') \
     && rm -rf /var/lib/apt/lists/*
 
-ENV VIRTUAL_ENV /env
-ENV PATH /env/bin:$PATH
+ENV VIRTUAL_ENV=/env
+ENV PATH=/env/bin:$PATH
 
 {% if cookiecutter.django_react == "enabled" -%}
 {% if cookiecutter.feature_annotations == "on" -%}# START_FEATURE django_react{%- endif %}
@@ -97,7 +119,9 @@ RUN set -ex \
     && apt purge -y --auto-remove $buildDeps $(! command -v gpg > /dev/null || echo 'gnupg dirmngr') \
     && rm -rf /var/lib/apt/lists/*
 
+# Set user to avoid running container command as root
+USER django
+
 EXPOSE 8080
 
 CMD ["gunicorn", "--bind", ":8080", "--certfile=/etc/pki/tls/certs/server.crt", "--keyfile=/etc/pki/tls/certs/server.key", "--workers", "2", "--threads", "5", "config.wsgi:application", "--access-logfile", "-", "--error-logfile", "-"]
-{% if cookiecutter.feature_annotations == "on" %}# END_FEATURE docker{%- endif %}
