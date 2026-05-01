@@ -21,7 +21,6 @@ env = environ.Env(
     DEBUG=(bool, False),
     # Set to True when running locally for development purposes
     LOCALHOST=(bool, False),
-    # Set to True in order to put the site in maintenance mode
     {%- if cookiecutter.docker == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
 
@@ -33,6 +32,7 @@ env = environ.Env(
     # END_FEATURE docker
     {%- endif %}
     {%- endif %}
+    # Set to True in order to put the site in maintenance mode
     MAINTENANCE_MODE=(bool, False),
     # Set to True on the production server environment; setting to False makes the
     # site have a "deny all" robots.txt and a non-production warning on all pages
