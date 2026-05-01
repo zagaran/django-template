@@ -9,7 +9,7 @@ import boto3.session
 from pygit2 import Repository
 
 AWS_REGION = "us-east-1"
-AWS_PROFILE_NAME = "FILL_ME_IN"
+AWS_PROFILE_NAME = "{{ cookiecutter.project_slug|replace('_', '-') }}"
 
 
 MIGRATION_TIMEOUT_SECONDS = 10 * 60  # Ten minutes

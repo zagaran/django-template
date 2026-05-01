@@ -24,7 +24,7 @@ module "ecs_deployment" {
 
     # Required Variables
     environment_name = "staging"  # Should match directory name
-    application_name = ""  # TODO: Base application slug for resource naming
+    application_name = "{{ cookiecutter.project_slug|replace('_', '-') }}"  # Base application slug for resource naming
     vpc_id = ""  # TODO: VPCs -> VPC ID
     web_config_secret_name = ""  # TODO: Secrets Manager -> Store a new secret -> Secret name
     s3_bucket_prefix = ""  # TODO: Base slug for S3 bucket names (unique among applications, shared among environments)

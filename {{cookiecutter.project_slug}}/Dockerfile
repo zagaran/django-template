@@ -1,4 +1,4 @@
-FROM python:3.11-slim-trixie
+FROM python:3.11-trixie
 
 # reduces file creation
 ENV PYTHONDONTWRITEBYTECODE=1

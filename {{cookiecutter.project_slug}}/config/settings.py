@@ -459,7 +459,7 @@ else:
 {%- else %}
 DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
 {%- endif %}
-STATIC_BACKEND = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"{% if cookiecutter.docker == "enabled" %}if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"{% endif %}
+STATIC_BACKEND = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"{% if cookiecutter.docker == "enabled" %} if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"{% endif %}
 STORAGES = {
     "default": DEFAULT_STORAGE,
     {%- if cookiecutter.sass_bootstrap == "enabled" %}
