@@ -212,12 +212,6 @@ Run `python deploy.py --help` to see available options. You may choose to use an
 The server self-signed SSL certificate is generated as part of Docker image creation. It is valid for 10 years and will 
 be regenerated every time python packages are updated, or if the Docker cache is cleared for any reason.
 
-### SSH
-To run a bash shell in an ECS environment, use `python deploy.py <ENV_NAME> ssh`. 
-{%- if cookiecutter.celery == "enabled" %}
-By default, this will run in the worker environment. Use the `--web` argument to run on the web server instead.
-{%- endif %}
-
 ### GitHub actions deployment
 The project includes a GitHub action workflow to build and deploy the application. To configure this, you must create
 an environment within the GitHub repository for each environment you wish to deploy to 
@@ -229,7 +223,15 @@ an environment within the GitHub repository for each environment you wish to dep
 You can then trigger deployment from any branch by navigating to Actions > Build and deploy application > Run workflow 
 and selecting the appropriate branch and environment. To add a new environment, make sure the deployment role name is 
 provided to the `ecs_deployment` module in `main.tf`, add a new environment within GitHub as specified above, and add
-a new environment option to `.github/workflows/build_and_deploy.yml` under `inputs`.
+a new environment option to `.github/workflows/build_and_deploy.yml` under `inputs`. The current supported environments 
+are:
+* staging
+
+### SSH
+To run a bash shell in an ECS environment, use `python deploy.py <ENV_NAME> ssh`. 
+{%- if cookiecutter.celery == "enabled" %}
+By default, this will run in the worker environment. Use the `--web` argument to run on the web server instead.
+{%- endif %}
 {%- if cookiecutter.celery == "enabled" %}
 
 ### Worker tasks & status monitoring
