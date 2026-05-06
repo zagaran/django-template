@@ -217,7 +217,19 @@ To run a bash shell in an ECS environment, use `python deploy.py <ENV_NAME> ssh`
 {%- if cookiecutter.celery == "enabled" %}
 By default, this will run in the worker environment. Use the `--web` argument to run on the web server instead.
 {%- endif %}
-{%- endif %}
+
+### GitHub actions deployment
+The project includes a GitHub action workflow to build and deploy the application. To configure this, you must create
+an environment within the GitHub repository for each environment you wish to deploy to 
+(Settings > Code & Automation > Environments) and add the following environment variables:
+* `AWS_PROFILE_NAME`: This should match the profile name specified in `deploy.py`.
+* `AWS_ROLE_TO_ASSUME`: This should be the result of running `terraform output github_actions_deployment_role_arn` 
+   within the appropriate terraform environment
+
+You can then trigger deployment from any branch by navigating to Actions > Build and deploy application > Run workflow 
+and selecting the appropriate branch and environment. To add a new environment, make sure the deployment role name is 
+provided to the `ecs_deployment` module in `main.tf`, add a new environment within GitHub as specified above, and add
+a new environment option to `.github/workflows/build_and_deploy.yml` under `inputs`.
 {%- if cookiecutter.celery == "enabled" %}
 
 ### Worker tasks & status monitoring
