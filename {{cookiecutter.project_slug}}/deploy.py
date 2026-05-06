@@ -1,5 +1,6 @@
 import argparse
 import logging
+import signal
 import subprocess
 import sys
 import time
@@ -382,7 +383,20 @@ def ssh(args):
         bash_command = ["aws", "ecs", "execute-command", "--cluster", cluster_id, "--task", task_id,
                         "--region", AWS_REGION, "--profile", args.profile, "--interactive",
                         "--command", "'/bin/bash'"]
-        subprocess.run(bash_command)
+        with subprocess.Popen(bash_command) as cmd:
+            ret = None
+            while ret is None:
+                try:
+                    ret = cmd.wait()
+                except KeyboardInterrupt:
+                    cmd.send_signal(signal.SIGINT)
+    else:
+        print(f"No task id(s) found. Is the {service_name} server running?")
+        {%- if cookiecutter.celery == "enabled" %}
+        if not args.web:
+            print("Try running with --web")
+        {%- endif %}
+
 
 
 ##########################
