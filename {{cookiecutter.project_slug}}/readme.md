@@ -165,14 +165,19 @@ with a Redis instance to act as a task broker. To create a new environment, add 
 with a `main.tf` that references the `ecs_deployment` module. The deployment script assumes that the `environment_name`
 parameter matches the directory name.
 
-Steps 1 - 4 may be shared between environments as appropriate. 
+In the following steps, config variables go in `terraform/envs/<ENV_NAME>/main.tf`; most of them go in the definition 
+of the `ecs_deployment` module.
+Steps 1 - 4 may be shared between environments as appropriate.
 
-1. Create an ECR repository. Add an appropriate lifecycle policy to remove untagged images (e.g. 90 days).
-3. Create a bucket for holding terraform config
-4. Create an SES identity and from email (if using SES)
-5. Create an AWS certificate manager certificate for your domain
-6. Create a secrets manager secret containing the config parameters needed by the application (you do not need to include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", "DEFAULT_FROM_EMAIL", or "CELERY_BROKER_URL" as those are managed by terraform in `terraform/modules/ecs_deployment/secrets_manager.tf`)
-7. Fill in the missing values in `terraform/envs/<ENV_NAME>/main.tf`
+1. Create a VPC and subnets (or use the default VPC). This is config var `ecs_deployment.vpc_id`.
+1. Create an ECR repository. Add an appropriate lifecycle policy to remove untagged images (e.g. 90 days). This is config var `ecs_deployment.ecr_repository_name`.
+3. Create a bucket for holding terraform config. This is config var `terraform.backend.bucket`.
+4. Create an SES identity and from email (if using SES). The from email is config var `ecs_deployment.ses_from_email`.
+5. Create an AWS certificate manager certificate for your domain. This is config var `ecs_deployment.certificate_manager_arn`.
+6. Create a secrets manager secret containing the config parameters needed by the application. This is config var `ecs_deployment.web_config_secret_name`. 
+   You do not need to include "DATABASE_URL", "SECRET_KEY", "AWS_STORAGE_BUCKET_NAME", "DEFAULT_FROM_EMAIL", or "CELERY_BROKER_URL" 
+   as those are managed by terraform in `terraform/modules/ecs_deployment/secrets_manager.tf`
+7. Fill in the remaining missing values in `terraform/envs/<ENV_NAME>/main.tf` (See TODOs for details)
 8. Run terraform to set up that environment
    ```
    cd terraform/envs/<ENV_NAME>
@@ -180,7 +185,7 @@ Steps 1 - 4 may be shared between environments as appropriate.
    terraform plan
    terraform apply
    ```
-   The initial service deployments will fail because they reference ECR images that don't exist, but this will be resolved by step (8)
+   The initial service deployments will fail because they reference ECR images that don't exist, but this will be resolved by the next step.
 9. Deploy your code using the steps described below. This will push the initial application image, start the server task(s), and run migrations.
 10. Add a DNS entry from your domain name to the created load balancer
 

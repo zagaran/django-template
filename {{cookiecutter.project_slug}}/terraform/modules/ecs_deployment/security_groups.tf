@@ -1,5 +1,6 @@
 resource "aws_security_group" "load_balancer" {
   name = "${local.app_env_name}-lb"
+  vpc_id = var.vpc_id
   
   ingress {
     from_port        = 80
@@ -34,6 +35,7 @@ resource "aws_security_group" "load_balancer" {
 
 resource "aws_security_group" "web" {
   name = "${local.app_env_name}-web"
+  vpc_id = var.vpc_id
 
   ingress {
     from_port       = 8080
@@ -64,6 +66,7 @@ resource "aws_security_group" "web" {
 {%- endif %}
 resource "aws_security_group" "worker" {
   name = "${local.app_env_name}-worker"
+  vpc_id = var.vpc_id
 
   egress {
     from_port   = 0
@@ -83,6 +86,7 @@ resource "aws_security_group" "worker" {
 
 resource "aws_security_group" "database" {
   name = "${local.app_env_name}-db"
+  vpc_id = var.vpc_id
 
   ingress {
     from_port       = 5432
@@ -109,6 +113,7 @@ resource "aws_security_group" "database" {
 
 resource "aws_security_group" "redis" {
   name = "${local.app_env_name}-redis"
+  vpc_id = var.vpc_id
 
   ingress {
     from_port = 6379
