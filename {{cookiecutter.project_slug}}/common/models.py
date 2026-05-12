@@ -76,9 +76,9 @@ class UploadFile(TimestampedModel):
 {%- endif %}
 {%- endif %}
 {%- if cookiecutter.user_action_tracking == "enabled" %}
+
+
 {%- if cookiecutter.feature_annotations == "on" %}
-
-
 # START_FEATURE user_action_tracking
 {%- endif %}
 class UserAction(TimestampedModel):
@@ -90,5 +90,18 @@ class UserAction(TimestampedModel):
     user_agent = models.TextField(null=True)
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE user_action_tracking
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.celery == "enabled" and cookiecutter.sentry != "enabled" %}
+
+
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE celery
+{%- endif %}
+class TaskMonitor(TimestampedModel):
+    """Model to track whether the task framework is successfully running tasks"""
+    last_run = models.DateTimeField(auto_now_add=True)
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE celery
 {%- endif %}
 {%- endif %}

@@ -16,6 +16,19 @@ from common.forms import SampleForm
 # END_FEATURE crispy_forms
 {%- endif %}
 {%- endif %}
+{%- if cookiecutter.celery == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE celery
+{%- endif %}
+from datetime import timedelta
+from django.utils import timezone
+{%- if cookiecutter.sentry != "enabled" %}
+from common.models import TaskMonitor
+{%- endif %}
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE celery
+{%- endif %}
+{%- endif %}
 
 
 class IndexView(TemplateView):
@@ -71,6 +84,27 @@ class SampleFormView(FormView):
 # END_FEATURE crispy_forms
 {%- endif %}
 {%- endif %}
+{%- endif %}
+{%- if cookiecutter.celery == "enabled" and cookiecutter.sentry != "enabled" %}
+
+
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE celery
+{%- endif %}
+
+class TaskMonitorView(View):
+    """View for uptime monitoring of task framework"""
+    def get(self, request, *args, **kwargs):
+        task_monitor, _ = TaskMonitor.objects.get_or_create()
+        # Status 500 if last task run was > 15 min ago
+        message = f"Last run: {timezone.localtime(task_monitor.last_run).isoformat()}"
+        worker_down = task_monitor.last_run < timezone.now() - timedelta(minutes=15)
+        return HttpResponse(message, status=500 if worker_down else 200)
+
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE celery
+{%- endif %}
+
 {%- endif %}
 
 def error_404(request, exception):

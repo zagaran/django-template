@@ -1,0 +1,6 @@
+# Editors
+.idea
+.vscode
+
+# Operating systems
+.DS_Store
