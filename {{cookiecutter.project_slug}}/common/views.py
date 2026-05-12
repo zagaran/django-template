@@ -22,7 +22,9 @@ from common.forms import SampleForm
 {%- endif %}
 from datetime import timedelta
 from django.utils import timezone
+{%- if cookiecutter.sentry != "enabled" %}
 from common.models import TaskMonitor
+{%- endif %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE celery
 {%- endif %}
