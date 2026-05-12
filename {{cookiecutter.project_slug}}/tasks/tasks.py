@@ -1,8 +1,11 @@
 from datetime import timedelta
 
 import celery.schedules
+import sentry_sdk
+from celery import signals
 from django.conf import settings
 from django.db.models import TextChoices
+from sentry_sdk.integrations.celery import CeleryIntegration
 
 from config.celery import app
 from tasks.system_monitoring import update_task_monitor
@@ -34,3 +37,22 @@ SCHEDULED_TASKS = {
     },
     TaskFrequency.daily: {},
 }
+{%- if cookiecutter.sentry == "enabled" %}
+
+
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE sentry
+{%- endif %}
+# Sentry task monitoring auto-instrumentation
+@signals.celeryd_init.connect
+def init_sentry(**kwargs):
+    if settings.SENTRY_DSN:
+        sentry_sdk.init(
+            dsn=settings.SENTRY_DSN,
+            integrations=[CeleryIntegration(monitor_beat_tasks=True)],
+        )
+
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE sentry
+{%- endif %}
+{%- endif %}

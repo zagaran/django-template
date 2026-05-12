@@ -224,5 +224,12 @@ By default, this will run in the worker environment. Use the `--web` argument to
 Scheduled worker tasks should be registered in `tasks/tasks.py`. Other async tasks can be registered in a `tasks.py` 
 file in any application.
 
+{%- if cookiecutter.sentry == "enabled" %}
+Each worker task will automatically register a Sentry cron monitor the first time it runs. By default, monitors have a 
+1-minute grace period, 30-minute timeout, and will register an issue after a single failure. These defaults and alert 
+settings can be modified within the Sentry UI. The `update_task_monitor` task does nothing but allows Sentry to monitor 
+the worker server for automated downtime detection.
+{%- else %}
 Worker server health status can be monitored at `/task-status/` for automated downtime detection. 
+{%- endif %}
 {%- endif %}

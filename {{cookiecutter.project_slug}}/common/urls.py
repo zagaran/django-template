@@ -5,7 +5,7 @@ from common import views
 
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
-    {%- if cookiecutter.celery == "enabled" %}
+    {%- if cookiecutter.celery == "enabled" and cookiecutter.sentry != "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE celery
     {%- endif %}

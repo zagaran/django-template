@@ -83,7 +83,7 @@ class SampleFormView(FormView):
 {%- endif %}
 {%- endif %}
 {%- endif %}
-{%- if cookiecutter.celery == "enabled" %}
+{%- if cookiecutter.celery == "enabled" and cookiecutter.sentry != "enabled" %}
 
 
 {%- if cookiecutter.feature_annotations == "on" %}

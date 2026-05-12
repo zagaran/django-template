@@ -76,9 +76,9 @@ class UploadFile(TimestampedModel):
 {%- endif %}
 {%- endif %}
 {%- if cookiecutter.user_action_tracking == "enabled" %}
+
+
 {%- if cookiecutter.feature_annotations == "on" %}
-
-
 # START_FEATURE user_action_tracking
 {%- endif %}
 class UserAction(TimestampedModel):
@@ -92,7 +92,7 @@ class UserAction(TimestampedModel):
 # END_FEATURE user_action_tracking
 {%- endif %}
 {%- endif %}
-{%- if cookiecutter.celery == "enabled" %}
+{%- if cookiecutter.celery == "enabled" and cookiecutter.sentry != "enabled" %}
 
 
 {%- if cookiecutter.feature_annotations == "on" %}
