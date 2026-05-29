@@ -1,0 +1,128 @@
+{%- raw -%}
+{% extends "base_templates/base.html" %}
+{% endraw %}
+{%- if cookiecutter.vue == "enabled" %}
+{%- raw %}
+{% load vue %}
+{% endraw %}
+{%- endif %}
+{%- raw %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+  <div id="app">
+    <h2>Dashboard</h2>
+    <p>Hello <b>{{ user.email }}</b>!</p>
+
+    <div class="my-4 card">
+      <div class="card-body">
+        <div class="d-flex gap-3">
+          <h3 class="card-title">Sample Objects</h3>
+          <a href="{% url 'sample-object-create' %}">
+            <button class="btn btn-sm btn-success">
+              <i class="bi bi-plus"></i> Create
+            </button>
+          </a>
+        </div>
+        <div class="my-2">
+          {% if sample_objects %}
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Created By</th>
+                <th>Created On</th>
+                {% endraw %}
+                {%- if cookiecutter.direct_upload == "enabled" %}
+                {%- if cookiecutter.feature_annotations == "on" %}
+                {% raw %}{# START_FEATURE direct_upload #}{% endraw %}
+                {%- endif %}
+                {%- raw %}
+                <th>Attachments</th>
+                {% endraw %}
+                {%- if cookiecutter.feature_annotations == "on" %}
+                {% raw %}{# END_FEATURE direct_upload #}{% endraw %}
+                {%- endif %}
+                {%- endif %}
+                {%- raw %}
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for sample_object in sample_objects %}
+              <tr>
+                <td>{{ sample_object.name }}</td>
+                <td>{{ sample_object.created_by }}</td>
+                <td>{{ sample_object.created_on }}</td>
+                {% endraw %}
+                {%- if cookiecutter.direct_upload == "enabled" %}
+                {%- if cookiecutter.feature_annotations == "on" %}
+                {% raw %}{# START_FEATURE direct_upload #}{% endraw %}
+                {%- endif %}
+                {%- raw %}
+                <td>
+                  {% for attachment in sample_object.get_attachments %}
+                  <span class="badge bg-info">{{ attachment.name }}</span>
+                  {% endfor %}
+                </td>
+                <td>
+                  <div class="d-flex gap-2">
+                    <a href="{% url 'sample-object' sample_object.id %}">
+                      <button class="btn btn-sm btn-secondary">View</button>
+                    </a>
+                    <a href="{% url 'sample-object-edit' sample_object.id %}">
+                      <button class="btn btn-sm btn-secondary">Edit</button>
+                    </a>
+                  </div>
+                </td>
+                {% endraw %}
+                {%- if cookiecutter.feature_annotations == "on" %}
+                {% raw %}{# END_FEATURE direct_upload #}{% endraw %}
+                {%- endif %}
+                {%- endif %}
+                {%- raw %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="alert alert-light">
+            <i class="bi bi-exclamation-square me-2"></i>
+            No Objects
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% endraw %}
+    {%- if cookiecutter.direct_upload == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    {% raw %}{# START_FEATURE direct_upload #}{% endraw %}
+    {%- endif %}
+    {%- raw %}
+    <div class="my-4 card">
+      <div class="card-body">
+        <h3 class="card-title">All Attachments</h3>
+        <file-upload-dashboard
+          :files="{{ attachments|jsonify }}"
+          storage-backend="{{ settings.DEFAULT_STORAGE_TYPE }}"
+          upload-start-url="{% url 'attachment_upload_start' %}"
+          :multiple="true"
+        ></file-upload-dashboard>
+      </div>
+    </div>
+    {% endraw %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    {% raw %}{# END_FEATURE direct_upload #}{% endraw %}
+    {%- endif %}
+    {%- endif %}
+    {%- raw %}
+  </div>
+{% endblock %}
+{%- endraw %}

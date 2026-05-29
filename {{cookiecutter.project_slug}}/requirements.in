@@ -3,6 +3,7 @@ django-environ
 django-extensions>=3.2
 requests
 psycopg2
+whitenoise
 {%- if cookiecutter.feature_annotations == "on" %}
 
 ####### OPTIONAL FEATURES #######
@@ -57,6 +58,17 @@ sentry-sdk
 django-storages
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE django_storages
+{%- endif %}
+{%- endif %}
+{%- if cookiecutter.direct_upload == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
+# START_FEATURE direct_upload
+{%- endif %}
+boto3
+djangorestframework
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE direct_upload
 {%- endif %}
 {%- endif %}
 {%- if cookiecutter.docker == "enabled" %}

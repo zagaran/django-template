@@ -1,0 +1,25 @@
+{%- raw -%}
+{% extends "base_templates/base.html" %}
+{% endraw %}
+{%- if cookiecutter.crispy_forms == "enabled" %}
+{%- raw %}
+{% load crispy_forms_tags %}
+{% endraw %}
+{%- endif %}
+{%- raw %}
+
+{% block title %}{{ form.action_title_formatted }}{% endblock %}
+
+{% block body %}
+<div id="app">
+  <h2>{{ form.action_title_formatted }}</h2>
+  {% endraw %}
+  {%- if cookiecutter.crispy_forms == "enabled" %}
+  {%- raw %}
+  {% crispy form %}
+  {% endraw %}
+  {%- endif %}
+  {%- raw %}
+</div>
+{% endblock %}
+{%- endraw %}

@@ -34,24 +34,22 @@
 {% endblock %}
 
 {% block body %}
-  <div class="container">
-    <p>Welcome to {% endraw %}{{ cookiecutter.project_name }}{% raw %}. Please log in to continue.</p>
-    {% endraw %}
-    {%- if cookiecutter.sass_bootstrap == "enabled" %}
-    {%- if cookiecutter.feature_annotations == "on" %}
-    {% raw %}{# START_FEATURE sass_bootstrap #}{% endraw %}
-    {%- endif %}
-    {%- if cookiecutter.reference_examples == "on" %}
-    {%- raw %}
-    {# TODO: delete me; this is just a reference example #}
-    <button class="btn btn-primary does-nothing-button">This button does nothing</button>
-    {%- endraw %}
-    {%- endif %}
-    {%- if cookiecutter.feature_annotations == "on" %}
-    {% raw %}{# END_FEATURE sass_bootstrap #}{% endraw %}
-    {%- endif %}
-    {%- endif %}
-    {%- raw %}
-  </div>
+  <p>Welcome to {% endraw %}{{ cookiecutter.project_name }}{% raw %}. Please log in to continue.</p>
+  {% endraw %}
+  {%- if cookiecutter.sass_bootstrap == "enabled" %}
+  {%- if cookiecutter.feature_annotations == "on" %}
+  {% raw %}{# START_FEATURE sass_bootstrap #}{% endraw %}
+  {%- endif %}
+  {%- if cookiecutter.reference_examples == "on" %}
+  {%- raw %}
+  {# TODO: delete me; this is just a reference example #}
+  <button class="btn btn-primary does-nothing-button">This button does nothing</button>
+  {%- endraw %}
+  {%- endif %}
+  {%- if cookiecutter.feature_annotations == "on" %}
+  {% raw %}{# END_FEATURE sass_bootstrap #}{% endraw %}
+  {%- endif %}
+  {%- endif %}
+  {%- raw %}
 {% endblock %}
 {%- endraw %}
