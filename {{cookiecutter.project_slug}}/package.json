@@ -23,6 +23,7 @@
     "@uppy/xhr-upload": "^5.1.1",
     "@vitejs/plugin-vue": "^6.0.3",
     "humanize-plus": "^1.8.2",
+    "glob": "^11.0.0",
     "rollup-plugin-external-globals": "^0.13.0",
     "vite": "^7.3.1",
     "vue": "^3.5.27"
