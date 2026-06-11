@@ -26,6 +26,7 @@ module "github_actions_role" {
   role_name = "github_actions_deployment_role"
   github_repo_name = "{{ cookiecutter.project_slug|replace('_', '-') }}"  # TODO: FILL ME IN
   github_repo_owner_name = ""  # TODO: Fill ME IN
+  terraform_state_s3_bucket_name = "" # TODO: FILL ME IN (should match S3 backend bucket above)
 }
 
 output "github_actions_deployment_role_arn" {

@@ -216,7 +216,7 @@ be regenerated every time python packages are updated, or if the Docker cache is
 The project includes a GitHub action workflow to build and deploy the application. To configure this, you must create
 an environment within the GitHub repository for each environment you wish to deploy to 
 (Settings > Code & Automation > Environments) and add the following environment variables:
-* `AWS_PROFILE_NAME`: This should match the profile name specified in `deploy.py`.
+* `AWS_PROFILE_NAME`: This should match the profile name specified in `deploy.py` and the terraform `main.tf`.
 * `AWS_ROLE_TO_ASSUME`: This should be the result of running `terraform output github_actions_deployment_role_arn` 
    within the appropriate terraform environment
 
@@ -245,5 +245,6 @@ settings can be modified within the Sentry UI. The `update_task_monitor` task do
 the worker server for automated downtime detection.
 {%- else %}
 Worker server health status can be monitored at `/task-status/` for automated downtime detection. 
+{%- endif %}
 {%- endif %}
 {%- endif %}

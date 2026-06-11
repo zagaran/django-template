@@ -10,6 +10,7 @@ CONDITIONAL_REMOVE_PATHS = [
     "{% if cookiecutter.elastic_beanstalk == 'disabled' %}.platform{% endif %}",
     "{% if cookiecutter.ecs == 'disabled' %}terraform{% endif %}",
     "{% if cookiecutter.ecs == 'disabled' %}deploy.py{% endif %}",
+    "{% if cookiecutter.ecs == 'disabled' %}.github/workflows/build_and_deploy.yml{% endif %}",
     "{% if cookiecutter.celery == 'disabled' %}terraform/modules/ecs_deployment/elasticache.tf{% endif %}",
     "{% if cookiecutter.celery == 'disabled' %}common/tasks.py{% endif %}",
     "{% if cookiecutter.celery == 'disabled' %}config/celery.py{% endif %}",

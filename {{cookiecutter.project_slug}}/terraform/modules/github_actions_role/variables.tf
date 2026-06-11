@@ -12,3 +12,8 @@ variable "github_repo_name" {
   type = string
   description = "Name of the GitHub repo for this code"
 }
+
+variable "terraform_state_s3_bucket_name" {
+  type = string
+  description = "Name of the S3 repo storing the terraform state for this environment"
+}
