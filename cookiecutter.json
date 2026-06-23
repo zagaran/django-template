@@ -20,5 +20,7 @@
   "sass_bootstrap":         ["enabled", "disabled"],
   "security_settings":      ["enabled", "disabled"],
   "sentry":                 ["enabled", "disabled"],
-  "user_action_tracking":   ["enabled", "disabled"]
+  "user_action_tracking":   ["enabled", "disabled"],
+  "direct_upload":          ["enabled", "disabled"],
+  "vue":                    ["enabled", "disabled"]
 }

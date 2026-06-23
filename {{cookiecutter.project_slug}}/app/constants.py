@@ -1,15 +1,10 @@
-from django.db.models import TextChoices
+SAMPLE_OBJECT_PK_URL_KWARG = "sample_object_id"
 {%- if cookiecutter.direct_upload == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 
-
 # START_FEATURE direct_upload
 {%- endif %}
-
-
-class StorageBackendType(TextChoices):
-    s3 = ("s3", "S3 Bucket")
-    filesystem = ("filesystem", "Local Filesystem Storage")
+ATTACHMENT_PK_URL_KWARG = "attachment_id"
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE direct_upload
 {%- endif %}
