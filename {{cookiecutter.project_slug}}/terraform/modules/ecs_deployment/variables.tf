@@ -71,6 +71,14 @@ variable "container_web_count" {
   default = 1
 }
 
+variable "github_actions_deployment_role" {
+  type = object({
+    name = string
+    id = string
+  })
+  default = null
+}
+
 {%- if cookiecutter.celery == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE celery
@@ -86,8 +94,8 @@ variable "container_worker_memory" {
 }
 
 variable "container_worker_count" {
-type = number
-default = 1
+  type = number
+  default = 1
 }
 
 variable "redis_instance_type" {
@@ -102,3 +110,4 @@ variable "ssl_policy" {
   type = string
   default = "ELBSecurityPolicy-TLS13-1-2-Res-FIPS-2023-04"
 }
+
