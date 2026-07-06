@@ -234,6 +234,10 @@ you can add the names of routes that should be excluded from action tracking bec
 (for example, if your site has a keep_alive route that the frontend regulalry hits automatically).  Note that only
 actions by authenticated users are tracked.
 
+## Report Generation (`reports`)
+This feature adds infrastructure for generating CSV reports from the database with minimal setup.
+
+
 # Optional Settings
 
 `MAINTENANCE_MODE`: Set this flag on a server environment to stop all user requests to the site, such as when you need to make substantial server updates or run a complex database migration.

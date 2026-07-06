@@ -436,32 +436,54 @@ MESSAGE_TAGS = {
 {%- endif %}
 {%- endif %}
 
-{%- if cookiecutter.django_storages == "enabled" %}
 
-{% if cookiecutter.feature_annotations == "on" %}
-# START_FEATURE django_storages
-{%- endif %}
-if LOCALHOST{% if cookiecutter.docker == "enabled" %} or BUILD{% endif %}:
-    DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
-    MEDIA_ROOT = ""
-else:
-    DEFAULT_STORAGE = {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-        "OPTIONS": {
+def get_storage_config(storage_location=""):
+    {%- if cookiecutter.django_storages == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # START_FEATURE django_storages
+    {%- endif %}
+    if LOCALHOST{% if cookiecutter.docker == "enabled" %} or BUILD{% endif %}:
+        backend = "django.core.files.storage.FileSystemStorage"
+        options = {
+            "base_url": f"/{storage_location}/",
+            "location": os.path.join(BASE_DIR, storage_location),
+        }
+    else:
+        backend = "storages.backends.s3boto3.S3Boto3Storage"
+        options = {
             "bucket_name": env("AWS_STORAGE_BUCKET_NAME"),
             "file_overwrite": False,
             "default_acl": "private",
         }
+        if storage_location:
+            options["location"] = storage_location
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # END_FEATURE django_storages
+    {%- endif %}
+    {%- else %}
+    backend = "django.core.files.storage.FileSystemStorage"
+    options = {
+        "base_url": f"/{storage_location}/",
+        "location": os.path.join(BASE_DIR, storage_location),
     }
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE django_storages
-{%- endif %}
-{%- else %}
-DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
-{%- endif %}
+    {%- endif %}
+    return {
+        "BACKEND": backend,
+        "OPTIONS": options,
+    }
+
 STATIC_BACKEND = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"{% if cookiecutter.docker == "enabled" %} if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"{% endif %}
 STORAGES = {
-    "default": DEFAULT_STORAGE,
+    "default": get_storage_config(),
+    {%- if cookiecutter.reports == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # START_FEATURE reports
+    {%- endif %}
+    "reports": get_storage_config("report_files"),
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # END_FEATURE reports
+    {%- endif %}
+    {%- endif %}
     {%- if cookiecutter.sass_bootstrap == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE sass_bootstrap

@@ -30,6 +30,18 @@ from common.models import TaskMonitor
 {%- endif %}
 {%- endif %}
 
+{%- if cookiecutter.reference_examples == "on" %}
+{%- if cookiecutter.reports == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE reports
+{%- endif %}
+from django.core.files.storage import storages
+from reports.reports import UsersReport, PermissionsReport
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE reports
+{%- endif %}
+{%- endif %}
+{%- endif %}
 
 class IndexView(TemplateView):
     template_name = "common/index.html"
@@ -105,6 +117,45 @@ class TaskMonitorView(View):
 # END_FEATURE celery
 {%- endif %}
 
+{%- endif %}
+{%- if cookiecutter.reference_examples == "on" %}
+{%- if cookiecutter.reports == "enabled" %}
+
+
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE reports
+{%- endif %}
+class SampleReportView(TemplateView):
+    # TODO: delete me; this is just a reference example
+    report_classes = [UsersReport, PermissionsReport]
+    template_name = 'common/sample_report_page.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        reports = []
+        for ReportClass in self.report_classes:
+            prefix = ReportClass.report_folder
+            report_file_paths = [f"{prefix}/{file_name}" for file_name in
+                                 storages["reports"].listdir(prefix)[1]]
+            reports.extend({
+                               "name": prefix,
+                               "generated_on": storages[
+                                   "reports"].get_created_time(file),
+                               "url": storages["reports"].url(file)
+                           } for file in report_file_paths)
+        context["reports"] = reports
+        return context
+
+    def post(self, request):
+        for ReportClass in self.report_classes:
+            ReportClass().write_report()
+        return redirect("report_generation_demo")
+
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE reports
+{%- endif %}
+
+{%- endif %}
 {%- endif %}
 
 def error_404(request, exception):
