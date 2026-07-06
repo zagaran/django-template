@@ -439,25 +439,24 @@ MESSAGE_TAGS = {
 
 def get_storage_config(storage_location=""):
     {%- if cookiecutter.django_storages == "enabled" %}
-
-    {% if cookiecutter.feature_annotations == "on" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE django_storages
     {%- endif %}
-        if LOCALHOST{% if cookiecutter.docker == "enabled" %} or BUILD{% endif %}:
-            backend = "django.core.files.storage.FileSystemStorage"
-            options = {
-                "base_url": f"/{storage_location}/",
-                "location": os.path.join(BASE_DIR, storage_location),
-            }
-        else:
-            backend = "storages.backends.s3boto3.S3Boto3Storage"
-            options = {
-                "bucket_name": env("AWS_STORAGE_BUCKET_NAME"),
-                "file_overwrite": False,
-                "default_acl": "private",
-            }
-            if storage_location:
-                options["location"] = storage_location
+    if LOCALHOST{% if cookiecutter.docker == "enabled" %} or BUILD{% endif %}:
+        backend = "django.core.files.storage.FileSystemStorage"
+        options = {
+            "base_url": f"/{storage_location}/",
+            "location": os.path.join(BASE_DIR, storage_location),
+        }
+    else:
+        backend = "storages.backends.s3boto3.S3Boto3Storage"
+        options = {
+            "bucket_name": env("AWS_STORAGE_BUCKET_NAME"),
+            "file_overwrite": False,
+            "default_acl": "private",
+        }
+        if storage_location:
+            options["location"] = storage_location
     {%- if cookiecutter.feature_annotations == "on" %}
     # END_FEATURE django_storages
     {%- endif %}
