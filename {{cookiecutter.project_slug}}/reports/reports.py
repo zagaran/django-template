@@ -40,7 +40,7 @@ class PermissionsReport(ReportSerializerBase):
         row_values["groups_with_permission"] = val
         return row_values
 
-{%- if cookiecutter.feature_annotations == "on" -%}
+{%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE reports
 {%- endif -%}
 {%- endif -%}
