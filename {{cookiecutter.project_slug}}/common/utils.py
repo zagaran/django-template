@@ -1,5 +1,5 @@
-{%- if cookiecutter.reports == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
+{%- if cookiecutter.reports == "enabled" -%}
+{%- if cookiecutter.feature_annotations == "on" -%}
 # START_FEATURE reports
 {%- endif %}
 def queryset_to_pages(queryset, page_size=2000, index_field="pk"):
@@ -12,7 +12,7 @@ def queryset_to_pages(queryset, page_size=2000, index_field="pk"):
         next_index = [getattr(obj, index_field) for obj in page][-1]
         page = queryset.filter(**{f"{index_field}__gt": next_index}).order_by(index_field)[:page_size]
 
-{%- if cookiecutter.feature_annotations == "on" %}
+{%- if cookiecutter.feature_annotations == "on" -%}
 # END_FEATURE reports
-{%- endif %}
-{%- endif %}
+{%- endif -%}
+{%- endif -%}
