@@ -26,6 +26,18 @@ urlpatterns = [
     {%- endif %}
     {%- endif %}
     {%- endif %}
+    {%- if cookiecutter.reference_examples == "on" %}
+    {%- if cookiecutter.reports == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # START_FEATURE reports
+    {%- endif %}
+    # TODO: delete me; this is just a reference example
+    path("report-demo/", views.SampleReportView.as_view(), name='report_generation_demo'),
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # END_FEATURE reports
+    {%- endif %}
+    {%- endif %}
+    {%- endif %}
     path("logout", views.LogoutView.as_view(), name="logout"),
     path("robots.txt", views.RobotsTxtView.as_view(), name="robots_txt"),
 ]

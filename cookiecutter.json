@@ -17,6 +17,7 @@
   "ecs":                    ["enabled", "disabled"],
   "elastic_beanstalk":      ["enabled", "disabled"],
   "pre_commit":             ["enabled", "disabled"],
+  "reports":                ["enabled", "disabled"],
   "sass_bootstrap":         ["enabled", "disabled"],
   "security_settings":      ["enabled", "disabled"],
   "sentry":                 ["enabled", "disabled"],
