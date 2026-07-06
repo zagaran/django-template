@@ -234,7 +234,7 @@ you can add the names of routes that should be excluded from action tracking bec
 (for example, if your site has a keep_alive route that the frontend regulalry hits automatically).  Note that only
 actions by authenticated users are tracked.
 
-## Report Generation from Database (`reports`)
+## Report Generation (`reports`)
 This feature adds infrastructure for generating CSV reports from the database with minimal setup.
 
 

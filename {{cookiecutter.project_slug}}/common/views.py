@@ -29,6 +29,7 @@ from common.models import TaskMonitor
 # END_FEATURE celery
 {%- endif %}
 {%- endif %}
+
 {%- if cookiecutter.reference_examples == "on" %}
 {%- if cookiecutter.reports == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
