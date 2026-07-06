@@ -1,3 +1,7 @@
+{%- if cookiecutter.reports == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE reports
+{%- endif %}
 def queryset_to_pages(queryset, page_size=2000, index_field="pk"):
     """
     Paginate queryset, ordered by `index_field`. `index_field` must be unique.
@@ -7,3 +11,8 @@ def queryset_to_pages(queryset, page_size=2000, index_field="pk"):
         yield page
         next_index = [getattr(obj, index_field) for obj in page][-1]
         page = queryset.filter(**{f"{index_field}__gt": next_index}).order_by(index_field)[:page_size]
+
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE reports
+{%- endif %}
+{%- endif %}

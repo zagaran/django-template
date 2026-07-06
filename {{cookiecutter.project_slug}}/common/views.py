@@ -29,6 +29,7 @@ from common.models import TaskMonitor
 # END_FEATURE celery
 {%- endif %}
 {%- endif %}
+{%- if cookiecutter.reference_examples == "on" %}
 {%- if cookiecutter.reports == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE reports
@@ -37,6 +38,7 @@ from django.core.files.storage import storages
 from reports.reports import UsersReport, PermissionsReport
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE reports
+{%- endif %}
 {%- endif %}
 {%- endif %}
 
@@ -122,7 +124,6 @@ class TaskMonitorView(View):
 {%- if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE reports
 {%- endif %}
-
 class SampleReportView(TemplateView):
     # TODO: delete me; this is just a reference example
     report_classes = [UsersReport, PermissionsReport]
