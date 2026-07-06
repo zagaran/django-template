@@ -1,7 +1,7 @@
-{%- if cookiecutter.reports == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
+{%- if cookiecutter.reports == "enabled" -%}
+{%- if cookiecutter.feature_annotations == "on" -%}
 # START_FEATURE reports
-{%- endif %}
+{%- endif -%}
 import csv
 import gc
 import io
@@ -178,7 +178,7 @@ class ReportSerializerBase:
         writer.save()
         logging.info("Done!")
 
-{%- if cookiecutter.feature_annotations == "on" %}
+{%- if cookiecutter.feature_annotations == "on" -%}
 # END_FEATURE reports
-{%- endif %}
-{%- endif %}
+{%- endif -%}
+{%- endif -%}

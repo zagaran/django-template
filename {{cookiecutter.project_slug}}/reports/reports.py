@@ -1,6 +1,6 @@
-{%- if cookiecutter.reference_examples == "on" %}
-{%- if cookiecutter.reports == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
+{%- if cookiecutter.reference_examples == "on" -%}
+{%- if cookiecutter.reports == "enabled" -%}
+{%- if cookiecutter.feature_annotations == "on" -%}
 # START_FEATURE reports
 {%- endif %}
 # TODO: delete me; this is just a reference example
@@ -40,8 +40,8 @@ class PermissionsReport(ReportSerializerBase):
         row_values["groups_with_permission"] = val
         return row_values
 
-{%- if cookiecutter.feature_annotations == "on" %}
+{%- if cookiecutter.feature_annotations == "on" -%}
 # END_FEATURE reports
-{%- endif %}
-{%- endif %}
-{%- endif %}
+{%- endif -%}
+{%- endif -%}
+{%- endif -%}
