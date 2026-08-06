@@ -70,7 +70,12 @@
                 {% raw %}{# START_FEATURE django_social #}{% endraw %}
                 {%- endif %}
                 {%- raw %}
-                <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}" class="btn btn-primary navbar-btn">Log in with Google</a>
+                <form action="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary navbar-btn">
+                    Log in with Google
+                  </button>
+                </form>
                 {% endraw %}
                 {%- if cookiecutter.feature_annotations == "on" -%}
                 {% raw %}{# END_FEATURE django_social #}{% endraw %}
