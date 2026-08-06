@@ -70,7 +70,7 @@
                 {% raw %}{# START_FEATURE django_social #}{% endraw %}
                 {%- endif %}
                 {%- raw %}
-                 <form action="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}" method="post">
+                <form action="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}" method="post">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-primary navbar-btn">
                     Log in with Google
