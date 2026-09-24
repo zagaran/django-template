@@ -3,7 +3,6 @@ django-environ
 django-extensions>=3.2
 requests
 psycopg2
-whitenoise
 {%- if cookiecutter.feature_annotations == "on" %}
 
 ####### OPTIONAL FEATURES #######

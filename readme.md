@@ -68,7 +68,7 @@ deleted from projects which do not leverage the feature.
 - `package.json`
 - `webpack-stats.json`
 - `config/webpack_loader.py`
-- `src/`
+- `react/`
 
 ### Additional Setup
 
@@ -134,6 +134,68 @@ served by the browser in a different environment than the React components expec
 
 
 ## AWS S3 (or other cloud blob storage) integration (`django_storages`)
+
+## Direct file uploads (`direct_upload`)
+
+This feature lets users upload files from the browser directly to S3 (via presigned URLs), rather than streaming the
+file through the Django server. It requires the `django_storages` and `vue` features.
+
+### What's included
+
+- `common.models.UploadFile`: an abstract model with a `file` field, upload/deletion timestamps, and helpers
+  (`download_file`, `view_file`) that return a response for downloading or viewing the file inline. It has no foreign
+  keys; subclasses decide how files are attached to other data.
+- `app.models.Attachment`: a concrete `UploadFile` owned by a user, used by the reference examples.
+- `app.fields.DirectUploadFileField`: a form field (a `ModelMultipleChoiceField`) that renders an upload dashboard, so
+  users can upload new files and select existing ones in a normal Django form. It accepts `allowed_file_types`,
+  `max_number_of_files`, and `max_file_size` (in bytes).
+- Upload views and URLs in `app/views.py` and `app/urls.py`, plus the `AttachmentSerializer` in `app/serializers.py`.
+- The `FileUploadDashboard` and `FileUploadDirect` Vue components, built on [Uppy](https://uppy.io/).
+- `common/utils/file_utils.py`: file name and presigned URL helpers.
+
+### How an upload works
+
+1. The client POSTs the file name to `attachments/upload-start/`. This creates an `Attachment` and returns an upload URL
+   and an upload-complete URL.
+2. The client uploads the file to the upload URL. On servers this is a presigned S3 `PUT` URL. On localhost, files are
+   stored with `FileSystemStorage` and the upload URL is a Django view that saves the streamed file.
+3. The client POSTs to the upload-complete URL, which marks the attachment complete. It can also pass a `relations`
+   JSON object (e.g. `{"sample_objects": "<id>"}`) to link the attachment to other objects. An invalid relation or pk
+   returns a 400 response.
+
+Attachments whose upload never completes are ignored by the dashboard and form field.
+
+### Usage
+
+```python
+from app.fields import DirectUploadFileField
+from app.models import Attachment
+
+
+class MyForm(forms.ModelForm):
+    attachments = DirectUploadFileField(
+        queryset=Attachment.objects.filter(deleted_on=None),
+        allowed_file_types=["pdf", "docx"],
+        max_file_size=10 * 1024 * 1024,
+        required=False,
+    )
+```
+
+### S3 setup
+
+The browser uploads straight to the bucket, so the bucket needs a CORS rule that allows `PUT` from your site's origin
+and exposes the `ETag` header. For example:
+
+```json
+[
+  {
+    "AllowedHeaders": ["*"],
+    "AllowedMethods": ["PUT"],
+    "AllowedOrigins": ["https://your-domain.example.com"],
+    "ExposeHeaders": ["ETag"]
+  }
+]
+```
 
 ## Docker integration (`docker`)
 
@@ -233,6 +295,41 @@ This can be useful for debugging, for analytics, or for auditing.  There is a se
 you can add the names of routes that should be excluded from action tracking because they would not be useful
 (for example, if your site has a keep_alive route that the frontend regulalry hits automatically).  Note that only
 actions by authenticated users are tracked.
+
+## Vue.js (`vue`)
+
+This feature adds [Vue 3](https://vuejs.org/), built with [Vite](https://vite.dev/). Vue components are used directly
+in Django templates, rather than in a separate single-page app.
+
+### Files
+
+- `vite.config.js`: the build config. Output goes to `static/js/dist/`.
+- `vue/pages/`: each `.js` file here is a build entrypoint. The base template loads `pages/default.js` by default; to
+  use a different entrypoint on a page, override the `bottom_javascript` block.
+- `vue/components/` and `vue/directives/`: every component and directive here is registered globally by `vue/main.js`.
+- `vue/composables/`: shared helpers, such as `useFetch` (which adds the CSRF token to POST requests).
+- `common/templatetags/vue.py`: template filters (`{% load vue %}`), including `jsonify` for passing context data to
+  component props, e.g. `:files="{{ attachments|jsonify }}"`.
+
+### How it works
+
+`pages/default.js` mounts a Vue app on the `#app` element in `base_templates/base.html`, which wraps the `body` block.
+This means the whole page body is compiled as a Vue template, so any registered component can be used in any template.
+
+Because the page body is a Vue template, never render user-supplied content inside `#app` that could contain Vue
+template syntax (e.g. `{{ }}`) without wrapping it in an element with `v-pre`.
+
+### Running
+
+Install Node dependencies with `npm install`, then:
+
+```
+npm run vue-dev    # Build in development mode and rebuild on changes
+npm run vue-build  # Production build
+```
+
+Run the production build before `collectstatic` when deploying.
+
 
 # Optional Settings
 

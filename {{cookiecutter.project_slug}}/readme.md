@@ -23,7 +23,7 @@ pip install -r requirements-dev.txt
 
 # Apply migrations and sync database schema.
 python manage.py migrate
-{%- if cookiecutter.django_react == "enabled" or cookiecutter.sass_bootstrap == "enabled" %}
+{%- if cookiecutter.django_react == "enabled" or cookiecutter.sass_bootstrap == "enabled" or cookiecutter.vue == "enabled" %}
 # Install Node dependencies
 npm install
 {%- endif %}
@@ -61,6 +61,26 @@ non-React parts of the codebase):
     ```bash
     node_modules/nwb/lib/bin/nwb.js build --no-vendor
     ```
+{%- endif %}
+{%- if cookiecutter.vue == "enabled" %}
+
+To build the Vue frontend (run alongside `manage.py runserver_plus`; it rebuilds on changes):
+```bash
+npm run vue-dev
+```
+
+For a production build, run `npm run vue-build`. Vue sources live in `vue/`, and each file in `vue/pages/` is a
+separate entrypoint that is built to `static/js/dist/`.
+{%- endif %}
+{%- if cookiecutter.direct_upload == "enabled" %}
+
+### File uploads
+
+Files are uploaded directly from the browser to S3 using presigned URLs. On localhost, files are stored on the local
+filesystem (in `uploads/`) instead, and no AWS setup is needed. On servers, the `AWS_STORAGE_BUCKET_NAME` bucket needs
+a CORS rule that allows `PUT` requests from the site's origin and exposes the `ETag` header.
+
+To accept file uploads in a form, use `app.fields.DirectUploadFileField` (see `app/forms.py` for an example).
 {%- endif %}
 
 To access the database:
