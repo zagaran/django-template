@@ -1,7 +1,3 @@
-{%- if cookiecutter.vue == "enabled" -%}
-{%- if cookiecutter.feature_annotations == "on" %}
-// START_FEATURE vue
-{% endif %}
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import { glob } from "glob"
@@ -56,7 +52,3 @@ export default defineConfig(({ mode }) => {
     },
   }
 })
-{%- if cookiecutter.feature_annotations == "on" %}
-// END_FEATURE vue
-{%- endif %}
-{%- endif %}

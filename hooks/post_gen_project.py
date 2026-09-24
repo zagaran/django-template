@@ -22,6 +22,11 @@ CONDITIONAL_REMOVE_PATHS = [
     "{% if cookiecutter.django_react == 'disabled' %}config/webpack_loader.py{% endif %}",
     "{% if cookiecutter.django_react == 'disabled' %}nwb.config.js{% endif %}",
     "{% if cookiecutter.django_react == 'disabled' and cookiecutter.sass_bootstrap == 'disabled' and cookiecutter.vue == 'disabled' %}package.json{% endif %}",
+    "{% if cookiecutter.vue == 'disabled' %}vue{% endif %}",
+    "{% if cookiecutter.vue == 'disabled' %}vite.config.js{% endif %}",
+    "{% if cookiecutter.direct_upload == 'disabled' %}common/utils{% endif %}",
+    "{% if cookiecutter.direct_upload == 'disabled' %}vue/components/FileUploadDashboard.vue{% endif %}",
+    "{% if cookiecutter.direct_upload == 'disabled' %}vue/components/FileUploadDirect.vue{% endif %}",
 ]
 
 

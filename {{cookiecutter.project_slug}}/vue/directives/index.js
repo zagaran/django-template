@@ -1,7 +1,3 @@
-{%- if cookiecutter.vue == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
-// START_FEATURE vue
-{%- endif %}
 const modules = import.meta.glob("./*.js", { eager: true })
 const components = {}
 
@@ -12,7 +8,3 @@ for (const path in modules) {
 }
 
 export default components
-{%- if cookiecutter.feature_annotations == "on" %}
-// END_FEATURE vue
-{%- endif %}
-{%- endif %}

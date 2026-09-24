@@ -1,7 +1,3 @@
-{%- if cookiecutter.vue == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
-// START_FEATURE vue
-{%- endif %}
 import { onMounted, ref } from "vue"
 
 export function useCSRF() {
@@ -11,7 +7,3 @@ export function useCSRF() {
   })
   return { csrf }
 }
-{%- if cookiecutter.feature_annotations == "on" %}
-// END_FEATURE vue
-{%- endif %}
-{%- endif %}

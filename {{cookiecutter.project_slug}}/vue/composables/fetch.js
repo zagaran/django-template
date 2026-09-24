@@ -1,7 +1,3 @@
-{%- if cookiecutter.vue == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
-// START_FEATURE vue
-{%- endif %}
 import { useCSRF } from "./csrf.js"
 
 export function useFetch() {
@@ -39,16 +35,14 @@ export function useFetch() {
     queryParams = {},
   ) => {
     const doQuery = async () => {
-      return await get(url, options, headers, queryParams).then(async res => {
-        if (res.status === 202) {
-          return false
-        } else {
-          if (handleResponse) {
-            return await handleResponse(res)
-          }
-          return await res.json()
-        }
-      })
+      const res = await get(url, options, headers, queryParams)
+      if (res.status === 202) {
+        return false
+      }
+      if (handleResponse) {
+        return await handleResponse(res)
+      }
+      return await res.json()
     }
     const tryAgain = () => {
       setTimeout(async () => {
@@ -64,7 +58,3 @@ export function useFetch() {
   }
   return { post, get, poll }
 }
-{%- if cookiecutter.feature_annotations == "on" %}
-// END_FEATURE vue
-{%- endif %}
-{%- endif %}

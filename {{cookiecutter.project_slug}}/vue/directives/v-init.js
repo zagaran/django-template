@@ -1,7 +1,3 @@
-{%- if cookiecutter.vue == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
-// START_FEATURE vue
-{%- endif %}
 import "vue"
 
 function set(context, path, value) {
@@ -59,7 +55,3 @@ const VInit = [
 ]
 
 export default VInit
-{%- if cookiecutter.feature_annotations == "on" %}
-// END_FEATURE vue
-{%- endif %}
-{%- endif %}

@@ -1,9 +1,18 @@
-{%- if cookiecutter.direct_upload == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
-# START_FEATURE direct_upload
-{%- endif %}
+import os
+
 from django.core.files.storage import default_storage
 from storages.backends.s3boto3 import S3Boto3Storage
+
+
+def get_file_extension(filename: str):
+    _, extension = os.path.splitext(filename)
+    extension = extension.lower().replace('.', '')
+    return extension
+
+
+def remove_file_extension(filename: str):
+    name, _ = os.path.splitext(filename)
+    return name
 
 
 def create_presigned_upload_url(object_name: str, expiration: int = 3600):
@@ -15,7 +24,3 @@ def create_presigned_upload_url(object_name: str, expiration: int = 3600):
         return default_storage.url(object_name, http_method="PUT", expire=expiration)
     else:
         raise Exception(f"Cannot create a presigned upload URL for {type(default_storage)} storage")
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE direct_upload
-{%- endif %}
-{%- endif %}

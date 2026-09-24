@@ -1,7 +1,3 @@
-{%- if cookiecutter.vue == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
-// START_FEATURE vue
-{%- endif %}
 import components from "./components"
 import directives from "./directives"
 
@@ -28,7 +24,3 @@ const MainVueApp = {
 export * from "./directives"
 export * from "./components"
 export default MainVueApp
-{%- if cookiecutter.feature_annotations == "on" %}
-// END_FEATURE vue
-{%- endif %}
-{%- endif %}

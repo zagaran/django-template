@@ -1,7 +1,3 @@
-{%- if cookiecutter.vue == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
-<!-- START_FEATURE vue -->
-{%- endif %}
 <template>
   <div ref="container" />
 </template>
@@ -133,7 +129,3 @@ onMounted(() => {
   return uppy
 })
 </script>
-{%- if cookiecutter.feature_annotations == "on" %}
-<!-- END_FEATURE vue -->
-{%- endif %}
-{%- endif %}
