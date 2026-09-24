@@ -92,16 +92,6 @@ env = environ.Env(
     # END_FEATURE debug_toolbar
     {%- endif %}
     {%- endif %}
-    {%- if cookiecutter.direct_upload == "enabled" %}
-    {%- if cookiecutter.feature_annotations == "on" %}
-
-    # START_FEATURE direct_upload
-    {%- endif %}
-    AWS_STORAGE_BUCKET_NAME=(str, ""),
-    {%- if cookiecutter.feature_annotations == "on" %}
-    # END_FEATURE direct_upload
-    {%- endif %}
-    {%- endif %}
 )
 # If ALLOWED_HOSTS has been configured, then we're running on a server and
 # can skip looking for a .env file (this assumes that .env files
@@ -236,7 +226,6 @@ INSTALLED_APPS = THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     "common.middleware.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     {%- if cookiecutter.docker == "enabled" %}
     {% if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE docker
@@ -463,36 +452,18 @@ MESSAGE_TAGS = {
 {% if cookiecutter.feature_annotations == "on" %}
 # START_FEATURE django_storages
 {%- endif %}
-{%- if cookiecutter.direct_upload == "enabled" %}
-{%- if cookiecutter.feature_annotations == "on" %}
-# START_FEATURE direct_upload
-{%- endif %}
-AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-if PRODUCTION and not AWS_STORAGE_BUCKET_NAME:
-    raise Exception('config/settings.py: `AWS_STORAGE_BUCKET_NAME` is required when `PRODUCTION=true`')
-
-if AWS_STORAGE_BUCKET_NAME:
-    DEFAULT_STORAGE_TYPE = StorageBackendType.s3
-    DEFAULT_STORAGE = {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-        "OPTIONS": {
-            "bucket_name": AWS_STORAGE_BUCKET_NAME,
-            "file_overwrite": False,
-            "default_acl": "private",
-            "signature_version": "s3v4",
-        }
-    }
-else:
-    DEFAULT_STORAGE_TYPE = StorageBackendType.filesystem
-    DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
-    MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
-{%- if cookiecutter.feature_annotations == "on" %}
-# END_FEATURE direct_upload
-{%- endif %}
-{%- else %}
 if LOCALHOST{% if cookiecutter.docker == "enabled" %} or BUILD{% endif %}:
     DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
     MEDIA_ROOT = ""
+    {%- if cookiecutter.direct_upload == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # START_FEATURE direct_upload
+    {%- endif %}
+    DEFAULT_STORAGE_TYPE = StorageBackendType.filesystem
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # END_FEATURE direct_upload
+    {%- endif %}
+    {%- endif %}
 else:
     DEFAULT_STORAGE = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
@@ -503,14 +474,22 @@ else:
             "signature_version": "s3v4",
         }
     }
-{%- endif %}
+    {%- if cookiecutter.direct_upload == "enabled" %}
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # START_FEATURE direct_upload
+    {%- endif %}
+    DEFAULT_STORAGE_TYPE = StorageBackendType.s3
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # END_FEATURE direct_upload
+    {%- endif %}
+    {%- endif %}
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE django_storages
 {%- endif %}
 {%- else %}
 DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
 {%- endif %}
-
+STATIC_BACKEND = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"{% if cookiecutter.docker == "enabled" %} if LOCALHOST else "whitenoise.storage.CompressedManifestStaticFilesStorage"{% endif %}
 STORAGES = {
     "default": DEFAULT_STORAGE,
     {%- if cookiecutter.sass_bootstrap == "enabled" %}
@@ -530,11 +509,7 @@ STORAGES = {
     {%- endif %}
     {%- endif %}
     "staticfiles": {
-        "BACKEND": (
-            "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-            if DEBUG else
-            "whitenoise.storage.CompressedManifestStaticFilesStorage"
-        ),
+        "BACKEND": STATIC_BACKEND,
     },
 }
 

@@ -68,12 +68,12 @@
     </div>
     {% endif %}
 
-    {% endraw %}
-    {%- if cookiecutter.bootstrap_messages == "enabled" %}
-    {%- if cookiecutter.feature_annotations == "on" -%}
+{%- endraw %}
+{%- if cookiecutter.bootstrap_messages == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
     {% raw %}{# START_FEATURE bootstrap_messages #}{% endraw %}
-    {%- endif %}
-    {%- raw %}
+{%- endif %}
+{%- raw %}
     <div class="container">
       {% for message in messages %}
         <div class="alert {% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible" role="alert">
@@ -83,32 +83,36 @@
           {{ message }}
         </div>
       {% endfor %}
-      <div class="container py-5">
-        {% block body %}
-        {% endblock %}
-      </div>
     </div>
-    {% endraw %}
-    {%- if cookiecutter.feature_annotations == "on" -%}
+{%- endraw %}
+{%- if cookiecutter.feature_annotations == "on" %}
     {% raw %}{# END_FEATURE bootstrap_messages #}{% endraw %}
-    {%- endif %}
-    {%- endif %}
-
+{%- endif %}
+{%- endif %}
+{%- raw %}
+    <div id="app" class="container py-5">
+      {% block body %}{% endblock %}
+    </div>
+{%- endraw %}
 {%- if cookiecutter.vue == "enabled" %}
-  {%- if cookiecutter.feature_annotations == "on" %}
+{%- if cookiecutter.feature_annotations == "on" %}
     {% raw %}{# START_FEATURE vue #}{% endraw %}
-  {%- endif %}
-  {%- raw %}
+{%- endif %}
+{%- raw %}
     <script>
       window.csrfmiddlewaretoken = '{{ csrf_token }}'
     </script>
     {% block bottom_javascript %}
       <script type="module" src="{% static "js/dist/pages/default.js" %}"></script>
     {% endblock %}
-  {%- endraw %}
-  {%- if cookiecutter.feature_annotations == "on" %}
+{%- endraw %}
+{%- if cookiecutter.feature_annotations == "on" %}
     {% raw %}{# END_FEATURE vue #}{% endraw %}
-  {%- endif %}
+{%- endif %}
+{%- else %}
+{%- raw %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+{%- endraw %}
 {%- endif %}
 {%- raw %}
   </body>

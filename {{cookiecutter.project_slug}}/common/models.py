@@ -6,13 +6,15 @@ import mimetypes
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 {%- if cookiecutter.direct_upload == "enabled" %}
-from django.http import FileResponse, Http404, HttpResponse, HttpResponseRedirect
-from django.core.files.storage import FileSystemStorage
 {%- if cookiecutter.feature_annotations == "on" %}
 
 # START_FEATURE direct_upload
 {%- endif %}
-from common.helpers import get_attachment_extension, remove_attachment_extension
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from django.http import FileResponse, Http404, HttpResponse, HttpResponseRedirect
+
+from common.utils.file_utils import get_file_extension, remove_file_extension
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE direct_upload
 {%- endif %}
@@ -23,12 +25,12 @@ from common.managers import UserManager
 {%- endif %}
 
 from common.permissions import ROLE_PERMISSIONS, UserRole
-{%- if cookiecutter.sentry == "enabled" %}
+{%- if cookiecutter.sentry == "enabled" and cookiecutter.direct_upload == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 
 # START_FEATURE sentry
 {%- endif %}
-from sentry_sdk import capture_message
+import sentry_sdk
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE sentry
 {%- endif %}
@@ -89,9 +91,10 @@ class User(AbstractUser, TimestampedModel):
 # START_FEATURE django_storages
 {%- endif %}
 def get_upload_prefix(instance, filename):
-    return "%s/%s/%s" % (
+    return "%s/%s/%s/%s" % (
         "uploads",
-        instance.user_id,
+        instance._meta.model_name,
+        instance.id,
         filename,
     )
 
@@ -101,7 +104,6 @@ class UploadFile(TimestampedModel):
     class Meta:
         abstract = True
 
-    user = models.ForeignKey(User, related_name="files", on_delete=models.PROTECT)
     name = models.CharField(max_length=512)
     file = models.FileField(max_length=1024, upload_to=get_upload_prefix)
 
@@ -112,41 +114,41 @@ class UploadFile(TimestampedModel):
     upload_completed_on = models.DateTimeField(null=True)
     deleted_on = models.DateTimeField(null=True)
 
-    def get_download_url(self, download_on_open: bool = True):
-        extension = get_attachment_extension(self.file.name)
-        filename = f"{remove_attachment_extension(self.name)}.{extension}".replace('"', '')
-        content_type, _ = mimetypes.guess_type(self.file.name)
-        s3_filename = self.file.name
-
-        content_disposition = "attachment" if download_on_open else "inline"
+    def get_file_response(self, as_attachment: bool = True) -> FileResponse | HttpResponse:
+        extension = get_file_extension(self.file.name)
+        filename = f"{remove_file_extension(self.name)}.{extension}".replace('"', '')
 
         try:
             if isinstance(self.file.storage, FileSystemStorage):
-                return FileResponse(
-                    self.file.open(),
-                    as_attachment=download_on_open,
-                    filename=filename
-                )
+                return FileResponse(self.file.open(), as_attachment=as_attachment, filename=filename)
 
-            # Download file directly from S3
-            else:
-                url = self.file.storage.url(self.file.name, parameters={
-                    "ResponseContentDisposition": f'{content_disposition}; filename="{filename}"',
-                    "ResponseContentType": content_type or "application/octet-stream",
-                })
-                return HttpResponseRedirect(url)
-
-        except Exception:
+            # Redirect to a presigned URL so the file is downloaded directly from S3
+            content_type, _ = mimetypes.guess_type(self.file.name)
+            content_disposition = "attachment" if as_attachment else "inline"
+            url = self.file.storage.url(self.file.name, parameters={
+                "ResponseContentDisposition": f'{content_disposition}; filename="{filename}"',
+                "ResponseContentType": content_type or "application/octet-stream",
+            })
+            return HttpResponseRedirect(url)
+        except Exception as e:
+            if settings.LOCALHOST:
+                raise
             {%- if cookiecutter.sentry == "enabled" %}
-            capture_message(f"Failed to get object URL from S3 for ({self}) with path ({s3_filename})")
+            sentry_sdk.set_context("upload_file", {
+                "model": self._meta.label,
+                "id": str(self.id),
+                "path": self.file.name,
+                "storage": type(self.file.storage).__name__,
+            })
+            sentry_sdk.capture_exception(e)
             {%- endif %}
-            raise Http404()
+            raise Http404() from e
 
     def download_file(self) -> FileResponse | HttpResponse:
-        return self.get_download_url(download_on_open=True)
+        return self.get_file_response(as_attachment=True)
 
     def view_file(self) -> FileResponse | HttpResponse:
-        return self.get_download_url(download_on_open=False)
+        return self.get_file_response(as_attachment=False)
     {%- if cookiecutter.feature_annotations == "on" %}
     # END_FEATURE direct_upload
     {%- endif %}

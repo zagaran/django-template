@@ -2,7 +2,7 @@
 
 import uuid
 from django.db import migrations, models
-{%- if cookiecutter.django_storages == "enabled" %}
+{%- if cookiecutter.direct_upload == "enabled" %}
 import common.models
 {%- endif %}
 

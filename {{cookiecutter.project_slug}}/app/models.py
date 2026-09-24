@@ -1,7 +1,7 @@
 from django.db import models
 
 from common.models import TimestampedModel, User
-{%- if cookiecutter.django_storages == "enabled" %}
+{%- if cookiecutter.direct_upload == "enabled" %}
 from common.models import UploadFile
 {%- endif %}
 
@@ -41,7 +41,7 @@ class SampleObject(TimestampedModel):
 # START_FEATURE direct_upload
 {%- endif %}
 class Attachment(UploadFile):
-    pass
+    user = models.ForeignKey(User, related_name="attachments", on_delete=models.PROTECT)
 {%- if cookiecutter.feature_annotations == "on" %}
 # END_FEATURE direct_upload
 {%- endif %}

@@ -1,17 +1,30 @@
-{%- if cookiecutter.crispy_forms == "enabled" %}
+{%- if cookiecutter.crispy_forms == "enabled" -%}
+{%- if cookiecutter.feature_annotations == "on" -%}
+# START_FEATURE crispy_forms
+{% endif -%}
 from crispy_forms.helper import Layout
 from crispy_forms.layout import Fieldset
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE crispy_forms
+{%- endif %}
+{% endif -%}
 from django import forms
 from django.http import HttpRequest
 from app.models import SampleObject
 {%- if cookiecutter.direct_upload == "enabled" %}
-from app.models import Attachment
-from common.fields import DirectUploadFileField
+{%- if cookiecutter.feature_annotations == "on" %}
+# START_FEATURE direct_upload
 {%- endif %}
-from common.forms import ActionFormMixin, CrispyFormMixin
+from app.fields import DirectUploadFileField
+from app.models import Attachment
+{%- if cookiecutter.feature_annotations == "on" %}
+# END_FEATURE direct_upload
+{%- endif %}
+{%- endif %}
+from common.forms import ActionFormMixin{% if cookiecutter.crispy_forms == "enabled" %}, CrispyFormMixin{% endif %}
 
 
-class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
+class SampleObjectBaseForm({% if cookiecutter.crispy_forms == "enabled" %}CrispyFormMixin, {% endif %}ActionFormMixin, forms.ModelForm):
     request: HttpRequest
     {%- if cookiecutter.direct_upload == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
@@ -27,8 +40,10 @@ class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
     class Meta:
         model = SampleObject
         exclude = ['created_by']
+    {%- if cookiecutter.crispy_forms == "enabled" %}
 
-    layout = Layout(
+    {% if cookiecutter.feature_annotations == "on" %}# START_FEATURE crispy_forms
+    {% endif %}layout = Layout(
         Fieldset(
             "Details",
             "name",
@@ -44,6 +59,10 @@ class SampleObjectBaseForm(CrispyFormMixin, ActionFormMixin, forms.ModelForm):
         {%- endif %}
         {%- endif %}
     )
+    {%- if cookiecutter.feature_annotations == "on" %}
+    # END_FEATURE crispy_forms
+    {%- endif %}
+    {%- endif %}
 
     def __init__(self, request: HttpRequest, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -60,4 +79,3 @@ class SampleObjectCreateForm(SampleObjectBaseForm):
 
 class SampleObjectEditForm(SampleObjectBaseForm):
     action_title = "Edit {instance}"
-{%- endif %}

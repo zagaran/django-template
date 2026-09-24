@@ -67,7 +67,7 @@ webpack-stats.json
 # END_FEATURE django_react
 
 # Locally uploaded files
-media/
+uploads/
 
 # START_FEATURE ecs
 .terraform/

@@ -10,9 +10,9 @@ from django.urls import reverse
 from app.serializers import AttachmentSerializer
 
 
-class DirectUploadFileInput(forms.SelectMultiple):
+class DirectUploadDashboardInput(forms.SelectMultiple):
     queryset: QuerySet
-    template_name = "widgets/direct_upload_file_input.html"
+    template_name = "widgets/direct_upload_dashboard_input.html"
 
     def get_context(self, name, value, attrs):
         context: dict = super().get_context(name, value, attrs)
@@ -30,7 +30,7 @@ class DirectUploadFileField(forms.ModelMultipleChoiceField):
     A field that allows for direct file uploads to S3 in form submissions.
     """
 
-    widget = DirectUploadFileInput
+    widget = DirectUploadDashboardInput
 
     def __init__(
         self,

@@ -1,17 +1,17 @@
-{%- if cookiecutter.crispy_forms == "enabled" -%}
-{%- if cookiecutter.feature_annotations == "on" -%}
+from django.db.models import Model
+{%- if cookiecutter.crispy_forms == "enabled" %}
+{%- if cookiecutter.feature_annotations == "on" %}
+
 # START_FEATURE crispy_forms
 {%- endif %}
 from crispy_forms.helper import FormHelper, Layout
 from crispy_forms.layout import Button, Submit
-from django.db.models import Model
 
 
 class CrispyFormMixin:
     submit_label: str = "Save"
     cancel_label: str = "Cancel"
     form_action: str = ""
-    form_tag: bool = True
     default_actions: bool = True
     layout: Layout | None = None
 

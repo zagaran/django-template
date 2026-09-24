@@ -5,7 +5,6 @@ from django.core.files.storage.filesystem import FileSystemStorage
 from django.db import transaction
 from django.http import JsonResponse
 from django.http.response import HttpResponse
-from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic.base import TemplateView, View
@@ -13,17 +12,16 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import CreateView, UpdateView
 
 from app.constants import SAMPLE_OBJECT_PK_URL_KWARG
-from app.models import SampleObject
-{%- if cookiecutter.crispy_forms == "enabled" %}
 from app.forms import SampleObjectCreateForm, SampleObjectEditForm
-{%- endif %}
+from app.models import SampleObject
 {%- if cookiecutter.direct_upload == "enabled" %}
 {%- if cookiecutter.feature_annotations == "on" %}
 
 # START_FEATURE direct_upload
 {%- endif %}
 import json
-from common.s3 import create_presigned_upload_url
+from django.core.exceptions import ValidationError
+from common.utils.file_utils import create_presigned_upload_url
 from app.constants import ATTACHMENT_PK_URL_KWARG
 from app.models import Attachment
 from app.serializers import AttachmentSerializer
@@ -36,33 +34,30 @@ from app.serializers import AttachmentSerializer
 class DashboardView(PermissionRequiredMixin, TemplateView):
     permission_required = Permission.dashboard
     template_name = "app/dashboard.html"
-    {%- if cookiecutter.direct_upload == "enabled" %}
-    {%- if cookiecutter.feature_annotations == "on" %}
 
-    # START_FEATURE direct_upload
-    {%- endif %}
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['sample_objects'] = SampleObject.objects.all()
+        {%- if cookiecutter.direct_upload == "enabled" %}
+        {%- if cookiecutter.feature_annotations == "on" %}
+        # START_FEATURE direct_upload
+        {%- endif %}
+        context['sample_objects'] = context['sample_objects'].prefetch_related('attachments')
         context['attachments'] = AttachmentSerializer(
             Attachment.objects.filter(deleted_on=None, upload_completed_on__isnull=False),
             many=True,
         ).data
-        context['sample_objects'] = SampleObject.objects.prefetch_related('attachments')
+        {%- if cookiecutter.feature_annotations == "on" %}
+        # END_FEATURE direct_upload
+        {%- endif %}
+        {%- endif %}
         return context
-    {%- if cookiecutter.feature_annotations == "on" %}
-    # END_FEATURE direct_upload
-    {%- endif %}
-    {%- endif %}
 
 
 class SampleObjectCreateView(PermissionRequiredMixin, RequestFormMixin, CreateView):
     permission_required = Permission.dashboard
     template_name = "app/sample_object_form.html"
-    {%- if cookiecutter.crispy_forms == "enabled" %}
     form_class = SampleObjectCreateForm
-    {%- else %}
-    fields = ['name', 'description']
-    {%- endif %}
     model = SampleObject
     success_url = reverse_lazy('dashboard')
 
@@ -92,11 +87,7 @@ class SampleObjectDetailView(PermissionRequiredMixin, DetailView):
 class SampleObjectEditView(PermissionRequiredMixin, RequestFormMixin, UpdateView):
     permission_required = Permission.dashboard
     template_name = "app/sample_object_form.html"
-    {%- if cookiecutter.crispy_forms == "enabled" %}
     form_class = SampleObjectEditForm
-    {%- else %}
-    fields = ['name', 'description']
-    {%- endif %}
     model = SampleObject
     pk_url_kwarg = SAMPLE_OBJECT_PK_URL_KWARG
     context_object_name = "sample_object"
@@ -169,21 +160,37 @@ class FileUploadStreamView(FileUploadBaseView):
 
 class FileUploadCompleteView(FileUploadBaseView):
 
-    def _link_objects(self, attachment: Attachment):
+    def _get_relations(self, attachment: Attachment):
+        """
+        Parses the `relations` POST param into a list of (accessor, related objects) pairs.
+        Raises a ValueError if any accessor or pk is invalid.
+        """
         relations = json.loads(self.request.POST.get("relations", "{}"))
+        parsed_relations = []
         for accessor_name, value in relations.items():
             accessor = getattr(attachment, accessor_name, None)
-            if accessor is None:
-                raise Exception(f'Accesor {accessor_name} does not exist on {attachment}')
-            pks = value if isinstance(value, list) else [value]
-            for pk in pks:
-                accessor.add(get_object_or_404(accessor.model, pk=pk))
+            if not hasattr(accessor, "add"):
+                raise ValueError(f"Accessor {accessor_name} does not exist on {attachment}")
+            pks = set(value if isinstance(value, list) else [value])
+            try:
+                related_objects = list(accessor.model.objects.filter(pk__in=pks))
+            except (ValueError, ValidationError):
+                raise ValueError(f"Invalid pk for {accessor_name}")
+            if len(related_objects) != len(pks):
+                raise ValueError(f"Invalid pk for {accessor_name}")
+            parsed_relations.append((accessor, related_objects))
+        return parsed_relations
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         instance = self.get_object()
+        try:
+            relations = self._get_relations(instance)
+        except ValueError as e:
+            return JsonResponse({"error": str(e)}, status=400)
+        for accessor, related_objects in relations:
+            accessor.add(*related_objects)
         instance.update(upload_completed_on=timezone.now())
-        self._link_objects(instance)
         return JsonResponse(AttachmentSerializer(instance).data)
 
 
