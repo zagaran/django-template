@@ -23,11 +23,14 @@ from common.permissions import Permission
 
 class IndexView(TemplateView):
     template_name = "common/index.html"
+    {%- if cookiecutter.reference_examples == "on" %}
 
     def get(self, request, *args, **kwargs):
+        # TODO: delete me; this is just a reference example
         if request.user.is_authenticated:
             return redirect("dashboard")
         return super().get(request, *args, **kwargs)
+    {%- endif %}
 
 
 class LogoutView(View):

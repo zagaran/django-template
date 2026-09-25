@@ -100,6 +100,13 @@ RUN ./node_modules/.bin/nwb build --no-vendor
 {% endif -%}
 
 
+{% if cookiecutter.vue == "enabled" -%}
+{% if cookiecutter.feature_annotations == "on" -%}# START_FEATURE vue{%- endif %}
+RUN npm run vue-build
+{% if cookiecutter.feature_annotations == "on" -%}# END_FEATURE vue{%- endif %}
+
+{% endif -%}
+
 {% if cookiecutter.sass_bootstrap == "enabled" -%}
 {%- if cookiecutter.feature_annotations == "on" -%}# START_FEATURE sass_bootstrap{%- endif %}
 RUN python manage.py compilescss

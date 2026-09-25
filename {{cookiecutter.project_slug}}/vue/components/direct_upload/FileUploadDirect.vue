@@ -3,8 +3,8 @@
 </template>
 
 <script setup>
-import { useFetch } from "../composables/fetch.js"
-import { useCSRF } from "../composables/csrf.js"
+import { useFetch } from "../../composables/fetch.js"
+import { useCSRF } from "../../composables/csrf.js"
 
 import { onMounted, useTemplateRef } from "vue"
 

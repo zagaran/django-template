@@ -26,7 +26,10 @@ urlpatterns = [
     path("oauth/", include("social_django.urls", namespace="social")),
     {%- endif %}
     path('', include("common.urls")),
+    {%- if cookiecutter.reference_examples == "on" %}
+    # TODO: delete me; this is just a reference example
     path('', include("app.urls")),
+    {%- endif %}
     # Health check is actually handled by the HealthCheckMiddleware
     path("health-check/", lambda request: HttpResponse("ok"), name=HEALTH_CHECK_URL_NAME),
 ]

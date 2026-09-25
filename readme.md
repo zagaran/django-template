@@ -47,6 +47,9 @@ If you turn on reference examples, the codebase will have a number of reference 
 {# TODO: delete me; this is just a reference example #}
 ```
 
+The reference examples also include the `app/` Django app (a sample model, dashboard, and CRUD views). When reference
+examples are off, `app/` is not generated.
+
 
 ## Django messages integration with Bootstrap (`bootstrap_messages`)
 
@@ -138,7 +141,8 @@ served by the browser in a different environment than the React components expec
 ## Direct file uploads (`direct_upload`)
 
 This feature lets users upload files from the browser directly to S3 (via presigned URLs), rather than streaming the
-file through the Django server. It requires the `django_storages` and `vue` features.
+file through the Django server. It requires the `django_storages`, `vue`, and `reference_examples` features
+(`Attachment` and the upload views live in the reference `app/`); generation fails if any of them is disabled.
 
 ### What's included
 
@@ -150,7 +154,8 @@ file through the Django server. It requires the `django_storages` and `vue` feat
   users can upload new files and select existing ones in a normal Django form. It accepts `allowed_file_types`,
   `max_number_of_files`, and `max_file_size` (in bytes).
 - Upload views and URLs in `app/views.py` and `app/urls.py`, plus the `AttachmentSerializer` in `app/serializers.py`.
-- The `FileUploadDashboard` and `FileUploadDirect` Vue components, built on [Uppy](https://uppy.io/).
+- The `FileUploadDashboard` and `FileUploadDirect` Vue components in `vue/components/direct_upload/`, built on
+  [Uppy](https://uppy.io/).
 - `common/utils/file_utils.py`: file name and presigned URL helpers.
 
 ### How an upload works
@@ -306,7 +311,8 @@ in Django templates, rather than in a separate single-page app.
 - `vite.config.js`: the build config. Output goes to `static/js/dist/`.
 - `vue/pages/`: each `.js` file here is a build entrypoint. The base template loads `pages/default.js` by default; to
   use a different entrypoint on a page, override the `bottom_javascript` block.
-- `vue/components/` and `vue/directives/`: every component and directive here is registered globally by `vue/main.js`.
+- `vue/components/` and `vue/directives/`: every component (including those in subdirectories) and directive here is
+  registered globally by `vue/main.js`, using its file name.
 - `vue/composables/`: shared helpers, such as `useFetch` (which adds the CSRF token to POST requests).
 - `common/templatetags/vue.py`: template filters (`{% load vue %}`), including `jsonify` for passing context data to
   component props, e.g. `:files="{{ attachments|jsonify }}"`.
@@ -328,7 +334,7 @@ npm run vue-dev    # Build in development mode and rebuild on changes
 npm run vue-build  # Production build
 ```
 
-Run the production build before `collectstatic` when deploying.
+Run the production build before `collectstatic` when deploying. If `docker` is enabled, the `Dockerfile` does this.
 
 
 # Optional Settings

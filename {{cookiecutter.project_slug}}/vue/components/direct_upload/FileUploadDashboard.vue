@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { useFetch } from "../composables/fetch.js"
+import { useFetch } from "../../composables/fetch.js"
 import { fileSize } from "humanize-plus"
 
 const { post } = useFetch()

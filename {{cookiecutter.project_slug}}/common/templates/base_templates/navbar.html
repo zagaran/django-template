@@ -15,6 +15,10 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
+{%- endraw %}
+{%- if cookiecutter.reference_examples == "on" %}
+{%- raw %}
+    {# TODO: delete me; this is just a reference example #}
     {% if user.is_authenticated %}
     <div class="navbar-nav gap-1">
       <a href="{% url 'dashboard' %}" class="btn btn-primary navbar-btn">
@@ -22,6 +26,9 @@
       </a>
     </div>
     {% endif %}
+{%- endraw %}
+{%- endif %}
+{%- raw %}
     <div class="collapse navbar-collapse justify-content-end" id="navbar-items">
       <div class="navbar-nav gap-1">
         {% if user.is_authenticated %}

@@ -209,7 +209,10 @@ if DEBUG_TOOLBAR:
 
 LOCAL_APPS = [
     "common",
+    {%- if cookiecutter.reference_examples == "on" %}
+    # TODO: delete me; this is just a reference example
     "app",
+    {%- endif %}
     {%- if cookiecutter.celery == "enabled" %}
     {%- if cookiecutter.feature_annotations == "on" %}
     # START_FEATURE celery
