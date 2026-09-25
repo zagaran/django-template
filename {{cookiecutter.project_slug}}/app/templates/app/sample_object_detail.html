@@ -12,7 +12,8 @@
 
 {% block body %}
 <div class="d-flex flex-column">
-  <div class="d-flex justify-content-between">
+  {# v-pre stops Vue from compiling user-supplied content as a template #}
+  <div class="d-flex justify-content-between" v-pre>
     <div>
       <h3>Sample Object {{ sample_object.name }}</h3>
       <span>Created by <b>{{ sample_object.created_by }}</b> on {{ sample_object.created_on }}</span>
@@ -37,7 +38,7 @@
     </div>
   </div>
 
-  <div class="card my-4">
+  <div class="card my-4" v-pre>
     <div class="card-body">
       <h4 class="card-title">Description</h4>
       <p style="white-space: pre-wrap">{{ sample_object.description }}</p>

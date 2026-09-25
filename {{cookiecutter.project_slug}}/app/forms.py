@@ -40,6 +40,18 @@ class SampleObjectBaseForm({% if cookiecutter.crispy_forms == "enabled" %}Crispy
     class Meta:
         model = SampleObject
         exclude = ['created_by']
+        {%- if cookiecutter.vue == "enabled" %}
+        {%- if cookiecutter.feature_annotations == "on" %}
+        # START_FEATURE vue
+        {%- endif %}
+        widgets = {
+            # v-pre stops Vue from compiling the user-supplied textarea content as a template
+            "description": forms.Textarea(attrs={"v-pre": True}),
+        }
+        {%- if cookiecutter.feature_annotations == "on" %}
+        # END_FEATURE vue
+        {%- endif %}
+        {%- endif %}
     {%- if cookiecutter.crispy_forms == "enabled" %}
 
     {% if cookiecutter.feature_annotations == "on" %}# START_FEATURE crispy_forms

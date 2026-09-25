@@ -16,9 +16,10 @@
 
 {% block body %}
   <h2>Dashboard</h2>
-  <p>Hello <b>{{ user.email }}</b>!</p>
+  {# v-pre stops Vue from compiling user-supplied content as a template #}
+  <p v-pre>Hello <b>{{ user.email }}</b>!</p>
 
-  <div class="my-4 card">
+  <div class="my-4 card" v-pre>
     <div class="card-body">
       <div class="d-flex gap-3">
         <h3 class="card-title">Sample Objects</h3>

@@ -11,7 +11,8 @@
 {% block title %}{{ form.action_title_formatted }}{% endblock %}
 
 {% block body %}
-  <h2>{{ form.action_title_formatted }}</h2>
+  {# v-pre stops Vue from compiling user-supplied content as a template #}
+  <h2 v-pre>{{ form.action_title_formatted }}</h2>
 {%- endraw %}
 {%- if cookiecutter.crispy_forms == "enabled" %}
 {%- raw %}
